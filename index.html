@@ -226,6 +226,7 @@ body.playing .wrap{gap:12px}
 .result .facts{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--dim);letter-spacing:.04em}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.result{animation:none}}
+.result .quip{font-size:clamp(26px,7.5vw,34px);margin:2px 0 4px}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -566,6 +567,7 @@ function resultCard(st,kind,gain){
   return `<div class="result ${kind}">
     <div class="verdict">${verdict}</div>
     ${gain>0?`<div class="gainbig">+${nl(gain)}</div>`:`<div class="gainbig zero">+0</div>`}
+    ${kind!=='task'?`<p class="quip">${esc(personal(st))}</p>`:''}
     <div class="rankline">Je staat <b>${i+1}e</b> van ${n} · <b>${nl(me.pts)}</b> punten</div>
     <div class="chase">${chase}</div>
     <div class="facts"><span>Koploper: <b>${esc(lead.name)}</b> · ${nl(lead.pts)}</span>${qc?`<span>${corr} van ${qc} goed</span>`:''}</div>
@@ -769,7 +771,6 @@ function renderPublic(tv){
     h=`<div class="stack">${!tv&&q&&!q.test?resultCard(st,q.task?(myGain>0?'task':'none'):(myGain>0?'ok':my?'bad':'none'),myGain):''}<span class="round">${esc(q?.round)}</span><p class="q-text">${esc(q?.text)}</p>
       ${q&&!q.task?`<div class="opts">${q.options.map((o,i)=>`<button class="opt ${i===rv.correct?'right':'dimmed'}" disabled><span class="k">${KEYLBL[i]}</span>${esc(o)}</button>`).join('')}</div>`:''}
       ${!tv&&q?.test?`<p class="mine">${my&&my.c===rv.correct?'Goed! Je snapt hoe het werkt.':(my?'Fout, maar dit was oefenen.':'Geen antwoord gegeven.')} <span class="muted" style="font-size:18px">Oefenvraag, telt niet mee.</span></p>`:''}
-      ${!tv&&q&&!q.task&&!q.test?`<p class="quip">${esc(personal(st))}</p>`:''}
       <div class="faces">${q&&!q.task&&commentary(st)?`<div class="commentator"><span class="label">De commentator</span><p>${esc(commentary(st))}</p></div>`:''}
       ${q&&!q.task?revealFaces(rv):''}</div>
       ${tv?'':`<h3>Stand</h3>${scoreboard(true)}`}</div>`;
