@@ -194,6 +194,9 @@ body.playing .wrap{gap:12px}
 .fxpick{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
 @media (prefers-reduced-motion:reduce){.av.party::before{animation:none}}
 .mult{display:inline-block;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.12em;padding:4px 10px;border-radius:999px;background:var(--goldfill);color:var(--ink);box-shadow:0 0 16px rgba(255,200,90,.45);align-self:center}
+.tapnote{margin:0;font-family:var(--read);font-weight:700;font-size:22px;color:var(--yellow)}
+.shot.tapping img{cursor:crosshair;outline:3px dashed var(--yellow);outline-offset:4px;border-radius:50%}
+.linkbtn{background:none;border:0;color:var(--gold-hi);text-decoration:underline;font:inherit;cursor:pointer;padding:0}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -534,82 +537,147 @@ function renderNoAccess(){
   app.innerHTML=`<div class="panel"><h2>Deze link werkt niet</h2><p>Scan de QR-code bij de spelleider opnieuw.</p></div>`;
 }
 
-const FILTERS=[['goud','Goud','sepia(.5) saturate(1.5) contrast(1.08) brightness(1.06)'],['pop','00s-pop','saturate(1.9) contrast(1.18) hue-rotate(-12deg)'],['glam','Glamour','grayscale(1) contrast(1.25) brightness(1.05)'],['orig','Origineel','none']];
+const FILTERS=[['goud','Goud'],['pop','00s-pop'],['glam','Glamour'],['orig','Origineel']];
 const PROPS=[['bril','2027-bril'],['snor','Snor'],['kroon','Kroon'],['hoed','Feesthoed'],['confetti','Confetti']];
-S.fx={f:'goud',props:['bril','confetti']};
+S.fx={f:'goud',props:['bril','confetti']};S.tap=null;S.detect='';
 function renderSelfie(me){
-  const prev=S.shot||me.photo;
+  const prev=S.tap?S.tapPreview:(S.shot||me.photo);
+  const hint=S.tap?`<p class="tapnote">Tik op je <b>${S.tap.length?'andere oog':'eerste oog'}</b> op de foto.</p>`
+    :S.raw?`<p class="muted" style="margin:0;font-size:13px">${S.detect==='busy'?'Je gezicht wordt gezocht…':S.detect==='tap'?'Je ogen zijn aangetikt.':S.detect==='ok'?'Gezicht gevonden. Zit de bril niet goed?':'Geen gezicht gevonden. Tik je ogen aan, dan klopt alles.'} <button class="linkbtn" data-act="tapeyes">Ogen aantikken</button></p>`:'';
   app.innerHTML=`<div class="panel selfie">
     <span class="label">Stap 2 van 2</span><h2>Tijd voor je feestportret, ${esc(me.name)}</h2>
     <p style="margin:0">Je portret komt de hele avond in beeld. Trek een gekke bek en kies je extra's.</p>
-    <div class="shot">${prev?`<img src="${esc(prev)}" alt="Jouw feestportret">`:`<span>Nog geen foto</span>`}</div>
+    <div class="shot ${S.tap?'tapping':''}">${prev?`<img src="${esc(prev)}" alt="Jouw feestportret" id="shotimg">`:`<span>Nog geen foto</span>`}</div>
+    ${hint}
     <input type="file" id="cam" accept="image/*" capture="user" hidden>
-    ${S.raw?`<div class="fxpick"><span class="label">Filter</span><div class="chips">${FILTERS.map(([k,l])=>`<button class="chip ${S.fx.f===k?'on':''}" data-act="fxf" data-k="${k}">${l}</button>`).join('')}</div>
+    ${S.raw&&!S.tap?`<div class="fxpick"><span class="label">Filter</span><div class="chips">${FILTERS.map(([k,l])=>`<button class="chip ${S.fx.f===k?'on':''}" data-act="fxf" data-k="${k}">${l}</button>`).join('')}</div>
       <span class="label">Extra's</span><div class="chips">${PROPS.map(([k,l])=>`<button class="chip ${S.fx.props.includes(k)?'on':''}" data-act="fxp" data-k="${k}">${l}</button>`).join('')}</div></div>`:''}
     <div class="row" style="justify-content:center">
       <label class="btn ${prev?'ghost':''}" for="cam">${prev?'Nieuwe foto':'Maak je selfie'}</label>
-      ${S.shot?`<button class="btn" data-act="usephoto">Deze is goed</button>`:''}
+      ${S.shot&&!S.tap?`<button class="btn" data-act="usephoto">Deze is goed</button>`:''}
+      ${S.tap?`<button class="btn ghost" data-act="tapcancel">Annuleren</button>`:''}
       ${me.photo&&!S.shot?`<button class="btn ghost" data-act="canceledit">Annuleren</button>`:''}
     </div></div>`;
 }
+/* ---------- gezicht zoeken (Google MediaPipe, laadt alleen bij de selfie) ---------- */
+let faceDet=null;
+async function getDetector(){
+  if(faceDet)return faceDet;
+  const V='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+  const m=await import(V+'/vision_bundle.mjs');
+  const files=await m.FilesetResolver.forVisionTasks(V+'/wasm');
+  faceDet=await m.FaceDetector.createFromOptions(files,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite',delegate:'CPU'},runningMode:'IMAGE',minDetectionConfidence:.45});
+  return faceDet;
+}
+function withTimeout(p,ms){return Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error('timeout')),ms))]);}
+async function findFace(cv){
+  try{const det=await withTimeout(getDetector(),15000);const r=det.detect(cv);const d=r&&r.detections&&r.detections[0];if(!d)return null;
+    const W=cv.width,H=cv.height,k=d.keypoints||[];
+    if(k.length<4)return null;
+    const P=i=>({x:k[i].x*W,y:k[i].y*H});
+    return{eyes:[P(0),P(1)],nose:P(2),mouth:P(3),box:d.boundingBox};}catch(e){return null;}
+}
+/* foto inladen, gezicht zoeken, vierkant uitsnijden rond het gezicht en spiegelen */
 async function loadRaw(file){
   const url=URL.createObjectURL(file);
-  try{const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url;});
+  try{
+    const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url;});
+    const sc=Math.min(1,900/Math.max(img.naturalWidth,img.naturalHeight));
+    const full=document.createElement('canvas');full.width=Math.round(img.naturalWidth*sc);full.height=Math.round(img.naturalHeight*sc);
+    full.getContext('2d').drawImage(img,0,0,full.width,full.height);
+    S.detect='busy';S.face=null;render();
+    const f=await findFace(full);
+    let cx=full.width/2,cy=full.height/2,side=Math.min(full.width,full.height);
+    if(f){const ex=(f.eyes[0].x+f.eyes[1].x)/2,ey=(f.eyes[0].y+f.eyes[1].y)/2,ed=Math.hypot(f.eyes[1].x-f.eyes[0].x,f.eyes[1].y-f.eyes[0].y);
+      side=Math.min(Math.min(full.width,full.height),ed*5.2);cx=ex;cy=ey+ed*.35;}
+    let sx=Math.max(0,Math.min(full.width-side,cx-side/2)),sy=Math.max(0,Math.min(full.height-side,cy-side/2));
     const n=360,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
-    const m=Math.min(img.naturalWidth,img.naturalHeight);
-    x.translate(n,0);x.scale(-1,1);
-    x.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,n,n);
-    return c;}
-  finally{URL.revokeObjectURL(url);}
+    x.translate(n,0);x.scale(-1,1);x.drawImage(full,sx,sy,side,side,0,0,n,n);
+    const T=p=>({x:n-(p.x-sx)*n/side,y:(p.y-sy)*n/side});
+    if(f){S.face=faceFrom(T(f.eyes[0]),T(f.eyes[1]),T(f.nose),T(f.mouth));S.detect='ok';}else{S.face=null;S.detect='none';}
+    return c;
+  }finally{URL.revokeObjectURL(url);}
+}
+function faceFrom(e1,e2,nose,mouth){
+  const [L,R]=e1.x<=e2.x?[e1,e2]:[e2,e1];
+  const d=Math.max(20,Math.hypot(R.x-L.x,R.y-L.y)),a=Math.atan2(R.y-L.y,R.x-L.x);
+  const mid={x:(L.x+R.x)/2,y:(L.y+R.y)/2},down={x:-Math.sin(a),y:Math.cos(a)};
+  const at=k=>({x:mid.x+down.x*d*k,y:mid.y+down.y*d*k});
+  return{L,R,d,a,mid,down,nose:nose||at(.75),mouth:mouth||at(1.2),top:at(-1.25)};
+}
+function defaultFace(n){return faceFrom({x:n*.36,y:n*.43},{x:n*.64,y:n*.43});}
+/* filters met eigen pixelbewerking: werkt ook op iPhone */
+function applyFilter(x,n,kind){
+  if(kind==='orig')return;
+  const im=x.getImageData(0,0,n,n),d=im.data;
+  const C=(v,c)=>(v-128)*c+128;
+  for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+    if(kind==='goud'){const R=.393*r+.769*g+.189*b,G=.349*r+.686*g+.168*b,B=.272*r+.534*g+.131*b;
+      r=r*.45+R*.55;g=g*.45+G*.55;b=b*.45+B*.55;r=C(r*1.08,1.08);g=C(g*1.02,1.08);b=C(b*.88,1.08);}
+    else if(kind==='pop'){const l=.299*r+.587*g+.114*b;r=l+(r-l)*1.9;g=l+(g-l)*1.9;b=l+(b-l)*1.9;r=C(r*1.04,1.18);g=C(g,1.18);b=C(b*1.08,1.18);}
+    else if(kind==='glam'){const l=.299*r+.587*g+.114*b;r=g=b=C(l*1.05,1.3);}
+    d[i]=r<0?0:r>255?255:r;d[i+1]=g<0?0:g>255?255:g;d[i+2]=b<0?0:b>255?255:b;}
+  x.putImageData(im,0,0);
 }
 function seeded(n){let s=n;return()=>((s=Math.imul(s^s>>>15,2246822507)^Math.imul(s^s>>>13,3266489909))>>>0)/4294967296;}
 async function compose(){
   const raw=S.raw;if(!raw)return null;
   try{await document.fonts.load('700 30px Cinzel');}catch(e){}
   const n=360,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
-  const f=FILTERS.find(z=>z[0]===S.fx.f)||FILTERS[0];
-  x.filter=f[2];x.drawImage(raw,0,0);x.filter='none';
+  x.drawImage(raw,0,0);applyFilter(x,n,S.fx.f);
   const v=x.createRadialGradient(n/2,n/2,n*.3,n/2,n/2,n*.72);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(40,22,0,.55)');x.fillStyle=v;x.fillRect(0,0,n,n);
   const gold=x.createLinearGradient(0,0,0,n);gold.addColorStop(0,'#fff2c6');gold.addColorStop(.4,'#f0c768');gold.addColorStop(.62,'#b9832a');gold.addColorStop(1,'#f3d488');
-  const P=S.fx.props;
+  const F=S.face||defaultFace(n);const P=S.fx.props;
   if(P.includes('confetti')){const r=seeded(7);const cols=['#ff3a3a','#35e266','#ffe41f','#36e6ff','#ff4ef0','#fff2c6'];
-    for(let i=0;i<70;i++){const a=r()*Math.PI*2,d=n*(.36+r()*.14);const px=n/2+Math.cos(a)*d,py=n/2+Math.sin(a)*d;
+    for(let i=0;i<70;i++){const a=r()*Math.PI*2,dd=n*(.38+r()*.12);const px=n/2+Math.cos(a)*dd,py=n/2+Math.sin(a)*dd;
       x.save();x.translate(px,py);x.rotate(r()*6);x.fillStyle=cols[i%cols.length];if(i%3)x.fillRect(-5,-2.5,10,5);else{x.beginPath();x.arc(0,0,3.5,0,7);x.fill();}x.restore();}}
-  if(P.includes('bril')){
-    const y=n*.43,rr=n*.12,lx=n*.34,rx=n*.66;
-    x.lineWidth=8;x.strokeStyle=gold;x.fillStyle='rgba(20,12,0,.55)';
-    for(const cx of [lx,rx]){x.beginPath();x.arc(cx,y,rr,0,7);x.fill();x.stroke();}
-    x.beginPath();x.moveTo(lx+rr,y-6);x.quadraticCurveTo(n/2,y-22,rx-rr,y-6);x.stroke();
-    x.beginPath();x.moveTo(lx-rr,y-4);x.lineTo(lx-rr-30,y-14);x.moveTo(rx+rr,y-4);x.lineTo(rx+rr+30,y-14);x.stroke();
-    x.fillStyle=gold;x.font='700 50px Cinzel, Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText('20',lx,y+3);x.fillText('27',rx,y+3);
-    x.fillStyle='rgba(255,255,255,.55)';for(const cx of [lx,rx]){x.beginPath();x.ellipse(cx-rr*.45,y-rr*.45,8,4,-.6,0,7);x.fill();}}
-  if(P.includes('snor')){
-    x.save();x.translate(n/2,n*.64);x.fillStyle='#1b120a';x.strokeStyle='#000';x.lineWidth=2;
-    x.beginPath();x.moveTo(0,-6);x.bezierCurveTo(22,-26,58,-14,70,-2);x.bezierCurveTo(78,8,90,2,94,-10);x.bezierCurveTo(96,14,62,26,40,10);x.bezierCurveTo(22,0,8,10,0,6);
-    x.bezierCurveTo(-8,10,-22,0,-40,10);x.bezierCurveTo(-62,26,-96,14,-94,-10);x.bezierCurveTo(-90,2,-78,8,-70,-2);x.bezierCurveTo(-58,-14,-22,-26,0,-6);x.fill();x.restore();}
-  if(P.includes('kroon')){
-    x.save();x.translate(n/2,n*.17);x.rotate(-.12);x.fillStyle=gold;x.strokeStyle='#7a4a10';x.lineWidth=3;
-    x.beginPath();x.moveTo(-70,30);x.lineTo(-78,-28);x.lineTo(-38,4);x.lineTo(0,-40);x.lineTo(38,4);x.lineTo(78,-28);x.lineTo(70,30);x.closePath();x.fill();x.stroke();
-    for(const [cx,cy,col] of [[-78,-28,'#ff3a3a'],[0,-40,'#36e6ff'],[78,-28,'#35e266']]){x.fillStyle=col;x.beginPath();x.arc(cx,cy,8,0,7);x.fill();}
-    x.fillStyle='#ff4ef0';x.beginPath();x.arc(0,14,9,0,7);x.fill();x.restore();}
   if(P.includes('hoed')){
-    x.save();x.translate(n*.72,n*.2);x.rotate(.38);
+    const hs=F.d/80;x.save();x.translate(F.top.x+Math.cos(F.a)*F.d*.55,F.top.y+Math.sin(F.a)*F.d*.55-F.d*.15);x.rotate(F.a+.38);x.scale(hs,hs);
     const hg=x.createLinearGradient(-50,0,50,0);hg.addColorStop(0,'#ff4ef0');hg.addColorStop(.5,'#ffe41f');hg.addColorStop(1,'#36e6ff');
     x.fillStyle=hg;x.beginPath();x.moveTo(0,-80);x.lineTo(46,30);x.lineTo(-46,30);x.closePath();x.fill();
     x.strokeStyle='rgba(255,255,255,.7)';x.lineWidth=5;for(const t of [-.35,.05,.45]){x.beginPath();x.moveTo(-46+92*(.5+t*.6)-20,30-110*(.5-t*.5));x.lineTo(-46+92*(.5+t*.6)+20,30-110*(.5-t*.5)+12);x.stroke();}
     x.fillStyle='#fff2c6';x.beginPath();x.arc(0,-82,13,0,7);x.fill();x.restore();}
-  /* gouden naamlint */
+  if(P.includes('kroon')){
+    const ks=F.d*1.9/156;x.save();x.translate(F.top.x,F.top.y);x.rotate(F.a);x.scale(ks,ks);x.fillStyle=gold;x.strokeStyle='#7a4a10';x.lineWidth=3;
+    x.beginPath();x.moveTo(-70,30);x.lineTo(-78,-28);x.lineTo(-38,4);x.lineTo(0,-40);x.lineTo(38,4);x.lineTo(78,-28);x.lineTo(70,30);x.closePath();x.fill();x.stroke();
+    for(const [cx,cy,col] of [[-78,-28,'#ff3a3a'],[0,-40,'#36e6ff'],[78,-28,'#35e266']]){x.fillStyle=col;x.beginPath();x.arc(cx,cy,8,0,7);x.fill();}
+    x.fillStyle='#ff4ef0';x.beginPath();x.arc(0,14,9,0,7);x.fill();x.restore();}
+  if(P.includes('snor')){
+    const ss=F.d*1.25/188;const mx=F.nose.x+(F.mouth.x-F.nose.x)*.5,my=F.nose.y+(F.mouth.y-F.nose.y)*.5;
+    x.save();x.translate(mx,my);x.rotate(F.a);x.scale(ss,ss);x.fillStyle='#1b120a';
+    x.beginPath();x.moveTo(0,-6);x.bezierCurveTo(22,-26,58,-14,70,-2);x.bezierCurveTo(78,8,90,2,94,-10);x.bezierCurveTo(96,14,62,26,40,10);x.bezierCurveTo(22,0,8,10,0,6);
+    x.bezierCurveTo(-8,10,-22,0,-40,10);x.bezierCurveTo(-62,26,-96,14,-94,-10);x.bezierCurveTo(-90,2,-78,8,-70,-2);x.bezierCurveTo(-58,-14,-22,-26,0,-6);x.fill();x.restore();}
+  if(P.includes('bril')){
+    const rr=F.d*.46,lw=Math.max(4,F.d*.09);
+    x.save();x.translate(F.mid.x,F.mid.y);x.rotate(F.a);
+    const lx=-F.d/2,rx=F.d/2;
+    x.lineWidth=lw;x.strokeStyle=gold;x.fillStyle='rgba(20,12,0,.45)';
+    for(const cx of [lx,rx]){x.beginPath();x.arc(cx,0,rr,0,7);x.fill();x.stroke();}
+    x.beginPath();x.moveTo(lx+rr*.9,-rr*.15);x.quadraticCurveTo(0,-rr*.55,rx-rr*.9,-rr*.15);x.stroke();
+    x.beginPath();x.moveTo(lx-rr,0);x.lineTo(lx-rr*1.9,-rr*.35);x.moveTo(rx+rr,0);x.lineTo(rx+rr*1.9,-rr*.35);x.stroke();
+    x.fillStyle=gold;x.font='700 '+Math.round(rr*1.05)+'px Cinzel, Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText('20',lx,rr*.06);x.fillText('27',rx,rr*.06);
+    x.fillStyle='rgba(255,255,255,.55)';for(const cx of [lx,rx]){x.beginPath();x.ellipse(cx-rr*.45,-rr*.45,rr*.18,rr*.08,-.6,0,7);x.fill();}
+    x.restore();}
   const name=(S.players[S.uid]?.name||'').toUpperCase().slice(0,14);
-  if(name){x.save();x.translate(n/2,n*.86);
+  if(name){x.save();x.translate(n/2,n*.88);
     x.fillStyle='#7a4a10';x.beginPath();x.moveTo(-128,-16);x.lineTo(-148,0);x.lineTo(-128,16);x.lineTo(-110,10);x.closePath();x.fill();x.beginPath();x.moveTo(128,-16);x.lineTo(148,0);x.lineTo(128,16);x.lineTo(110,10);x.closePath();x.fill();
     x.fillStyle=gold;x.beginPath();x.moveTo(-118,-22);x.quadraticCurveTo(0,-34,118,-22);x.lineTo(118,16);x.quadraticCurveTo(0,4,-118,16);x.closePath();x.fill();
     x.fillStyle='#1a1206';x.font='700 '+(name.length>9?22:28)+'px Cinzel, Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText(name,0,-6);x.restore();}
-  return c.toDataURL('image/jpeg',.78);
+  return c.toDataURL('image/jpeg',.8);
 }
 async function recompose(){try{S.shot=await compose();}catch(e){S.shot=null;}render();}
+function tapPreview(){const n=360,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');x.drawImage(S.raw,0,0);
+  x.fillStyle='#ffe41f';x.strokeStyle='#000';x.lineWidth=2;for(const p of S.tap){x.beginPath();x.arc(p.x,p.y,7,0,7);x.fill();x.stroke();}return c.toDataURL('image/jpeg',.85);}
 document.addEventListener('change',async e=>{
   if(e.target.id!=='cam'||!e.target.files?.[0])return;
-  try{S.raw=await loadRaw(e.target.files[0]);await recompose();}catch(err){toast('Deze foto lukt niet. Probeer het nog een keer.');}
+  try{S.tap=null;S.raw=await loadRaw(e.target.files[0]);await recompose();}catch(err){S.detect='';toast('Deze foto lukt niet. Probeer het nog een keer.');render();}
+});
+document.addEventListener('click',async ev=>{
+  if(ev.target.id!=='shotimg'||!S.tap||!S.raw)return;
+  const r=ev.target.getBoundingClientRect();const p={x:(ev.clientX-r.left)/r.width*360,y:(ev.clientY-r.top)/r.height*360};
+  S.tap.push(p);
+  if(S.tap.length>=2){S.face=faceFrom(S.tap[0],S.tap[1]);S.tap=null;S.detect='tap';await recompose();}
+  else{S.tapPreview=tapPreview();render();}
 });
 function renderJoin(me){
   app.innerHTML=`<form class="panel" id="joinform">
@@ -818,6 +886,8 @@ document.addEventListener('click',async e=>{
   else if(a==='edit'){S.editing=true;render();}
   else if(a==='retake'){S.retake=true;S.shot=null;S.raw=null;render();}
   else if(a==='canceledit'){S.editing=false;S.retake=false;S.shot=null;render();}
+  else if(a==='tapeyes'){S.tap=[];S.tapPreview=tapPreview();render();}
+  else if(a==='tapcancel'){S.tap=null;render();}
   else if(a==='fxf'){S.fx.f=b.dataset.k;await recompose();}
   else if(a==='fxp'){const k=b.dataset.k;S.fx.props=S.fx.props.includes(k)?S.fx.props.filter(z=>z!==k):[...S.fx.props,k];await recompose();}
   else if(a==='usephoto'){const photo=S.shot;if(!photo)return;
