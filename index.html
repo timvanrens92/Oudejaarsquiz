@@ -197,6 +197,19 @@ body.playing .wrap{gap:12px}
 .tapnote{margin:0;font-family:var(--read);font-weight:700;font-size:22px;color:var(--yellow)}
 .shot.tapping img{cursor:crosshair;outline:3px dashed var(--yellow);outline-offset:4px;border-radius:50%}
 .linkbtn{background:none;border:0;color:var(--gold-hi);text-decoration:underline;font:inherit;cursor:pointer;padding:0}
+.strip .cell.lead{padding-top:8px;border-color:var(--gold-hi);background:linear-gradient(110deg,rgba(60,42,10,.9) 0%,rgba(120,86,24,.9) 45%,rgba(255,230,160,.55) 50%,rgba(120,86,24,.9) 55%,rgba(60,42,10,.9) 100%);background-size:250% 100%;animation:shimmer 2.8s linear infinite;box-shadow:0 0 18px rgba(255,200,90,.45)}
+.strip .cell.lead .av{margin-top:6px}
+.strip .cell.lead .av .hat{display:block}
+.strip .lbl{display:block;font-family:var(--display);font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi);line-height:1;overflow:visible}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-150% 0}}
+.leadfx{position:fixed;inset:0;z-index:15;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(70,48,10,.98),rgba(0,0,0,.98));padding:20px;cursor:pointer}
+.leadcard{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.leadpic{padding-top:70px}
+.leadname{margin:6px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(40px,12vw,84px);line-height:1;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent}
+.leadsub{margin:0;font-family:var(--script);font-size:clamp(26px,7vw,40px);color:var(--gold-hi)}
+.leadfx.go .leadcard{animation:leadin .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes leadin{from{transform:scale(.3) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.strip .cell.lead,.leadfx.go .leadcard{animation:none}}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -985,11 +998,19 @@ function fx(on){FW.end(on);}
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('.opt');if(b&&!b.disabled)FW.pop(e.clientX,e.clientY);},true);
 
 /* vuurwerk bij goede antwoorden en punten */
-let celebSeq=null,celebTask=null;
+let celebSeq=null,celebTask=null,celebLead=null;
+function showLeader(id){
+  if(!S.players[id])return;let el=$('#leadfx');
+  if(!el){el=document.createElement('div');el.id='leadfx';el.className='leadfx';document.body.appendChild(el);el.addEventListener('click',()=>el.hidden=true);}
+  el.innerHTML=`<div class="leadcard"><span class="label">Wisseling aan kop</span><div class="leadpic">${avatar(id,170,'party wobble crown')}</div><p class="leadname">${esc(pname(id))}</p><p class="leadsub">${id===S.uid?'Jij staat bovenaan! Niet meer weggaan.':'staat nu bovenaan. Iedereen: pak \'m!'}</p></div>`;
+  el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
+  FW.show(8);clearTimeout(showLeader._t);showLeader._t=setTimeout(()=>{el.hidden=true;},4200);
+}
 function celebrate(){
   const st=S.state;if(!st)return;
   const tv=(S.owner&&S.view==='tv')||NET.tv;const player=!S.owner&&S.uid&&S.players[S.uid]&&!S.editing;
   FW.ambient(st.phase==='lobby'&&(tv||player));
+  if(st.phase==='reveal'&&st.reveal?.leaderChange&&st.seq!==celebLead&&(tv||player)){celebLead=st.seq;setTimeout(()=>showLeader(st.reveal.leaderChange),1600);}
   if(st.phase==='reveal'&&st.seq!==celebSeq){
     celebSeq=st.seq;
     if(tv&&st.q&&!st.q.task)FW.show(5);
@@ -1012,7 +1033,7 @@ function renderStrip(){
   el.hidden=false;
   const top=list[0].pts;
   el.innerHTML=list.map((p,i)=>{const lead=top>0&&p.pts===top;
-    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,32)}</span><span class="n">${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
+    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,lead?38:32,lead?'party crown':'')}</span><span class="n">${lead?'<small class="lbl">Koploper</small>':''}${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
   list.forEach(p=>{if(lastPts[p.id]!==undefined&&p.pts>lastPts[p.id]){const n=el.querySelector('[data-sid="'+p.id+'"]');n&&n.classList.add('bump');}lastPts[p.id]=p.pts;});
 }
 const _render=render;
