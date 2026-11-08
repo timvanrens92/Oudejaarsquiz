@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Oudejaarsquiz '92</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500&family=Pinyon+Script&display=swap">
+<style>
+/* Layout: gala-affiche in zwart en goud — gouden titel, vaste scorebalk, één kolom, vier gouden antwoordknoppen A-D */
+:root{
+  --bg:#070509;
+  --panel:rgba(22,17,10,.78);
+  --fg:#f7efdc;
+  --dim:#b8a888;
+  --gold:#e8bd5c;
+  --gold-hi:#fff0bf;
+  --gold-lo:#9b6a1c;
+  --line:rgba(232,189,92,.38);
+  --ink:#1a1206;
+  --red:#ff3a3a;
+  --green:#35e266;
+  --yellow:#ffe41f;
+  --cyan:#36e6ff;
+  --magenta:#ff4ef0;
+  --wine:#7a1420;
+  --goldfill:linear-gradient(180deg,#fff2c6 0%,#f0c768 38%,#b9832a 62%,#f3d488 100%);
+  --display:"Cinzel","Trajan Pro",Georgia,serif;
+  --script:"Pinyon Script","Snell Roundhand",cursive;
+  --read:"Cormorant Garamond",Garamond,Georgia,serif;
+  --body:"Jost","Futura","Avenir Next",system-ui,sans-serif;
+  --tt:"Cinzel",Georgia,serif;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:15px;line-height:1.5;min-height:100%;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+*{box-sizing:border-box}
+.bokeh{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(circle at 8% 18%,rgba(255,206,110,.22) 0 26px,transparent 60px),
+  radial-gradient(circle at 92% 12%,rgba(255,220,140,.18) 0 40px,transparent 90px),
+  radial-gradient(circle at 85% 70%,rgba(255,190,90,.14) 0 30px,transparent 80px),
+  radial-gradient(circle at 15% 82%,rgba(255,215,130,.12) 0 50px,transparent 110px),
+  radial-gradient(circle at 50% 40%,rgba(120,70,10,.25),transparent 70%),
+  radial-gradient(ellipse at 50% 0%,rgba(232,189,92,.16),transparent 55%)}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding-block:10px 48px;display:flex;flex-direction:column;gap:18px}
+.wrap.wide{max-width:1100px}
+.masthead{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;padding-block:6px 0}
+.masthead .pre{font-family:var(--display);font-size:11px;letter-spacing:.42em;color:var(--dim);text-transform:uppercase;padding-left:.42em}
+.masthead h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(30px,9vw,72px);line-height:.95;letter-spacing:.02em;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 10px rgba(232,170,60,.35))}
+.masthead .script{font-family:var(--script);font-size:clamp(36px,10vw,62px);line-height:1;color:var(--gold-hi);margin-top:2px;text-shadow:0 0 18px rgba(255,200,100,.45)}
+.masthead .date{display:flex;align-items:center;gap:12px;width:100%;max-width:440px;font-family:var(--display);font-size:12px;letter-spacing:.32em;color:var(--fg);text-transform:uppercase;margin-top:8px}
+.masthead .date::before,.masthead .date::after{content:"";flex:1;height:1px;background:var(--line)}
+.mosaic{height:6px;width:120px;align-self:center;background:repeating-linear-gradient(90deg,var(--red) 0 24px,var(--green) 24px 48px,var(--yellow) 48px 72px,var(--cyan) 72px 96px,var(--magenta) 96px 120px)}
+h2{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.1;margin:0;color:var(--gold);letter-spacing:.04em;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:13px;margin:0;color:var(--dim);letter-spacing:.28em;text-transform:uppercase}
+.label{font-family:var(--display);font-size:11px;text-transform:uppercase;letter-spacing:.24em;color:var(--dim)}
+.q-text{font-family:var(--read);font-weight:600;font-size:clamp(28px,7.4vw,40px);line-height:1.1;color:var(--fg);margin:0;text-wrap:balance}
+.round{font-family:var(--script);font-size:30px;line-height:1;color:var(--gold-hi)}
+.muted{color:var(--dim)}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(40px,12vw,80px);line-height:1;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent;text-wrap:balance}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:10px 14px;border:1px solid var(--line);border-radius:3px;background:var(--panel);font-family:var(--read);font-weight:600;font-size:26px;line-height:1.05;text-align:left;color:var(--fg);cursor:pointer;transition:transform .12s,border-color .2s,background .2s}
+.opt:not(:disabled):active{transform:scale(.98)}
+.opt:not(:disabled):hover{border-color:var(--gold)}
+.opt .k{display:inline-grid;place-items:center;width:32px;height:32px;font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink);flex:none;border-radius:2px}
+.opt .k{background:var(--goldfill)}.opt.picked .k,.opt.right .k{background:var(--ink);color:var(--gold-hi)}
+.opt:disabled{cursor:default}
+.opt.dimmed{opacity:.28}
+.opt.picked{background:var(--goldfill);color:var(--ink);border-color:var(--gold-hi)}
+.opt.right{background:var(--goldfill);color:var(--ink);border-color:var(--gold-hi);box-shadow:0 0 0 2px rgba(255,230,160,.5),0 0 34px rgba(255,200,90,.55);animation:shine 1.6s ease-in-out 2}
+@keyframes shine{50%{box-shadow:0 0 0 2px rgba(255,240,190,.9),0 0 60px rgba(255,210,110,.9)}}
+.timer{height:6px;background:rgba(232,189,92,.15);position:relative;border-radius:3px;overflow:hidden}
+.timer i{position:absolute;inset:0 auto 0 0;background:var(--goldfill);width:100%}
+.timer-row{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--display);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.timer-row b{font-family:var(--display);font-size:26px;letter-spacing:0;color:var(--yellow);font-weight:400;font-variant-numeric:tabular-nums}
+.btn{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;line-height:1.1;padding:12px 18px;border:0;border-radius:3px;background:var(--goldfill);color:var(--ink);cursor:pointer;box-shadow:0 4px 18px rgba(232,170,60,.25)}
+.btn.r{background:var(--wine);color:var(--fg);box-shadow:none}
+.btn.ghost,.btn.m{background:transparent;color:var(--gold-hi);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.sm{font-size:12px;padding:8px 11px}
+.btn:disabled{opacity:.35;cursor:default}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,.team.pick:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+input[type=text]{font-family:var(--read);font-weight:600;font-size:24px;padding:8px 12px;border:1px solid var(--line);border-radius:3px;background:rgba(0,0,0,.5);color:var(--fg);width:100%}
+.teams{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.team{display:flex;align-items:center;gap:12px;min-width:0;padding:10px 12px;font-family:var(--read);font-weight:600;font-size:24px;line-height:1.05;background:rgba(0,0,0,.45);border:1px solid rgba(232,189,92,.18);border-radius:3px}
+.team .sw{width:6px;height:28px;flex:none;border-radius:1px}
+.team .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team .pts{font-family:var(--display);font-weight:700;font-size:20px;color:var(--yellow);font-variant-numeric:tabular-nums}
+.team .plus{font-family:var(--display);color:var(--green);font-size:16px}
+.team.pick{cursor:pointer;width:100%;color:var(--fg);text-align:left}
+.team.pick.on{border-color:var(--gold-hi);box-shadow:0 0 0 1px var(--gold-hi),0 0 22px rgba(255,200,90,.3)}
+.sw.magenta{background:var(--magenta)}.sw.cyan{background:var(--cyan)}.sw.yellow{background:var(--yellow)}
+.notice{border-left:3px solid var(--gold);padding:8px 12px;background:rgba(232,189,92,.08);margin:0}
+.grid2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.qlist{display:flex;flex-direction:column;gap:2px;max-height:560px;overflow:auto}
+.qi{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 8px;background:rgba(0,0,0,.35)}
+.qi .p{font-family:var(--display);font-weight:700;font-size:16px;color:var(--gold)}
+.qi .t{font-size:13px;line-height:1.3;min-width:0}
+.qi.cur{background:rgba(232,189,92,.18)}
+.qi.done .t{color:var(--dim)}
+.qi .ty{font-family:var(--display);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.rh{font-family:var(--script);font-size:26px;color:var(--gold-hi);padding:10px 0 2px}
+.ans{font-family:var(--read);font-weight:700;font-size:24px;color:var(--green);margin:0}
+.tabs{display:flex;gap:8px}
+.tabs button{flex:1}
+.counts{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--display);font-size:18px}
+.mine{font-family:var(--read);font-weight:700;font-size:32px;line-height:1.05;margin:0}
+.mine span[style]{font-family:var(--tt)}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--goldfill);color:var(--ink);font-family:var(--body);font-weight:500;padding:10px 16px;border-radius:3px;z-index:9;max-width:90vw}
+.searching{font-family:var(--read);font-size:26px;color:var(--fg);text-align:center}
+.searching b{color:var(--yellow);font-weight:400}
+@media (prefers-reduced-motion:reduce){.opt.right{animation:none}.opt{transition:none}}
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;display:flex;flex-wrap:wrap;gap:6px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.strip .cell{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;align-items:center;padding:5px 10px 5px 6px;background:var(--panel);border:1px solid rgba(232,189,92,.2);border-radius:999px;flex:1 1 calc(33.33% - 6px);min-width:0;max-width:220px}
+.strip .cell.lead{border-color:var(--gold-hi);box-shadow:0 0 16px rgba(255,200,90,.28)}
+.strip .rk{display:contents}
+.strip .rk i{display:inline-block;width:14px;height:4px;border-radius:1px}
+.strip .lead .rk{color:var(--gold-hi)}
+.strip .n{grid-column:2;font-family:var(--read);font-weight:700;font-size:14px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip .s{grid-column:2;font-family:var(--display);font-weight:700;font-size:15px;line-height:1.1;color:var(--yellow);font-variant-numeric:tabular-nums}
+.strip .s.bump{animation:bump 1s ease-out}
+@keyframes bump{0%{color:var(--green);transform:scale(1.25);transform-origin:left}100%{transform:none}}
+.strip .mine-team{outline:1px dashed var(--line);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.strip .s.bump{animation:none}}
+.qr-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qr{background:#fff;padding:6px;border-radius:3px;width:150px;flex:none;box-shadow:0 0 0 1px var(--gold),0 0 26px rgba(255,200,90,.3)}
+.qr-wrap.tvqr .qr{width:min(280px,70vw)}
+.qr svg{display:block;width:100%;height:auto}
+.qr-wrap.tvqr{flex-direction:column;align-items:center;text-align:center;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:3px}
+.team .rank{font-family:var(--display);font-weight:700;font-size:15px;color:var(--gold);width:22px;flex:none}
+.team.me{border-color:var(--gold-hi)}
+.gain{font-family:var(--display);color:var(--gold-hi)}
+.btn.spot{background:#1db954;color:#06140a;box-shadow:none;text-decoration:none;display:inline-block}
+.autonext{border:1px solid var(--gold-hi);padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:rgba(232,189,92,.12)}
+.av{--s:40px;width:var(--s);height:var(--s);border-radius:50%;position:relative;flex:none;display:inline-grid;place-items:center;background:var(--goldfill);color:var(--ink);box-shadow:0 0 0 2px var(--gold),0 0 12px rgba(255,200,90,.25)}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.av b{font-family:var(--display);font-size:calc(var(--s)*.45)}
+.av .hat{display:none}
+.av.hatty .hat{display:block;position:absolute;left:50%;top:calc(var(--s)*-.42);width:calc(var(--s)*.42);height:calc(var(--s)*.55);transform:translateX(-20%) rotate(18deg);background:repeating-linear-gradient(135deg,var(--magenta) 0 7px,var(--yellow) 7px 14px,var(--cyan) 14px 21px);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.av.crown .hat{display:block;position:absolute;left:50%;background:var(--goldfill);clip-path:polygon(0 100%,0 30%,22% 60%,50% 0,78% 60%,100% 30%,100% 100%);width:calc(var(--s)*.6);height:calc(var(--s)*.38);top:calc(var(--s)*-.3);transform:translateX(-50%) rotate(-8deg)}
+.av.wobble{animation:wobble 1.4s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.06)}}
+.av.oops{filter:grayscale(1) contrast(1.1);transform:rotate(-14deg)}
+.av.sleep{filter:grayscale(1) brightness(.6);transform:rotate(90deg)}
+.fastest{display:flex;align-items:center;gap:20px;padding:22px 16px 16px;background:var(--panel);border:1px solid var(--gold-hi);border-radius:3px;box-shadow:0 0 30px rgba(255,200,90,.25)}
+.oops-row{display:flex;flex-direction:column;gap:8px}
+.crowd{display:flex;flex-wrap:wrap;gap:22px 18px;justify-content:center;padding-top:30px}
+.crowd-i{display:flex;flex-direction:column;align-items:center;gap:6px;max-width:90px}
+.crowd-i small{font-size:12px;color:var(--dim);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px}
+.crowd .crowd-i{animation:bob 2.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.winner{display:flex;justify-content:center;padding-top:60px}
+.selfie{align-items:center;text-align:center}
+.shot{--s:min(220px,60vw);width:var(--s);height:var(--s);border-radius:50%;position:relative;margin-top:6px;background:rgba(0,0,0,.5);box-shadow:0 0 0 3px var(--gold),0 0 30px rgba(255,200,90,.35);display:grid;place-items:center;color:var(--dim)}
+.shot img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.strip .rk .av{grid-row:1/3}
+.strip .rk .pos{display:none}
+.strip::-webkit-scrollbar{display:none}
+
+@media (prefers-reduced-motion:reduce){.av.wobble,.crowd .crowd-i{animation:none}}
+.commentator{border-left:3px solid var(--magenta);padding:10px 14px;background:rgba(255,78,240,.08);display:flex;flex-direction:column;gap:4px}
+.commentator p{margin:0;font-family:var(--read);font-weight:600;font-style:italic;font-size:22px;line-height:1.2}
+.quip{margin:0;font-family:var(--script);font-size:30px;line-height:1.1;color:var(--gold-hi)}
+body.playing .masthead .script,body.playing .masthead .date{display:none}
+body.playing .masthead h1{font-size:clamp(22px,6vw,34px)}
+body.playing .wrap{gap:12px}
+.qr-wrap.tvqr .stack{width:100%;max-width:520px;align-items:center}
+.faces{display:flex;flex-direction:column;gap:14px}
+@media (min-width:900px){
+  body.tv .wrap{max-width:1240px}
+  body.tv .q-text{font-size:clamp(34px,3.6vw,54px)}
+  body.tv .opts{grid-template-columns:1fr 1fr}
+  body.tv .opt{min-height:72px;font-size:30px}
+  body.tv .tv-lobby{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:28px;align-items:start}
+  body.tv .tv-lobby .crowd{justify-content:flex-start}
+  body.tv .faces{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+  body.tv .faces .commentator{grid-column:1/-1}
+  body.tv.playing .masthead{display:none}
+}
+@media (min-width:700px){.strip .cell{flex:1 1 120px;max-width:none}}
+.endhero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.av.party::before{content:"";position:absolute;inset:calc(var(--s)*-.07);border-radius:50%;background:conic-gradient(from var(--ang,0deg),#fff2c6,#f0c768,#b9832a,#ff4ef0,#36e6ff,#ffe41f,#fff2c6);z-index:-1;animation:spinring 4s linear infinite;filter:drop-shadow(0 0 10px rgba(255,200,90,.6))}
+.av.party{z-index:0;isolation:isolate}
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes spinring{to{--ang:360deg}}
+.av.crown{isolation:isolate}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{font-family:var(--body);font-weight:500;font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.4);color:var(--fg);cursor:pointer}
+.chip.on{background:var(--goldfill);color:var(--ink);border-color:var(--gold-hi)}
+.fxpick{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
+@media (prefers-reduced-motion:reduce){.av.party::before{animation:none}}
+.mult{display:inline-block;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.12em;padding:4px 10px;border-radius:999px;background:var(--goldfill);color:var(--ink);box-shadow:0 0 16px rgba(255,200,90,.45);align-self:center}
+.netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.netstat{display:flex;align-items:center;gap:8px;font-size:13px}
+.netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
+.netstat.off i{background:var(--red);box-shadow:0 0 8px var(--red)}
+</style>
+
+<div class="bokeh" aria-hidden="true"></div>
+<div class="wrap" id="wrap">
+    <header class="masthead">
+    <h1>Oudejaarsquiz</h1>
+    <span class="script">Back to the 00s</span>
+    <span class="date">31 december · op naar 2027</span>
+  </header>
+    <div id="strip" class="strip" hidden aria-label="Tussenstand"></div>
+  <main id="app" class="stack" aria-live="polite">
+    <p class="searching">Even laden…</p>
+  </main>
+</div>
+<canvas id="fx"></canvas>
+<div id="toast" class="toast" hidden></div>
+<div id="netbar" class="netbar" hidden></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>window.__BANK=new URLSearchParams(location.search).get("join")?null:JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("eyJpdGVtcyI6IFt7InJvdW5kIjogIk9lZmVudnJhYWcgwrcgdGVsdCBuaWV0IG1lZSIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMjUsICJ0ZXh0IjogIldlbGsgamFhciBiZWdpbnQgZXIgdmFubmFjaHQgb20gMTIgdXVyPyIsICJvcHRpb25zIjogWyIyMDI2IiwgIjIwMjciLCAiMjAwMCIsICIxOTkyIl0sICJjb3JyZWN0IjogMSwgInRlc3QiOiB0cnVlfSwgeyJyb3VuZCI6ICJSb25kZSAxIMK3IExldmVuIGluIGRlIDAwcyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIk1ldCB3ZWxrIGdlbGQgYmV0YWFsZGUgamUgdmFuYWYgMSBqYW51YXJpIDIwMDI/IiwgIm9wdGlvbnMiOiBbIkd1bGRlbiIsICJEb2xsYXIiLCAiRXVybyIsICJNYXJrIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAxfSwgeyJyb3VuZCI6ICJSb25kZSAxIMK3IExldmVuIGluIGRlIDAwcyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIk1ldCB3ZWxrIEFwcGxlLWFwcGFyYWF0amUgdWl0IDIwMDEgaGFkIGplIGFsIGplIG11emllayBvcCB6YWs/IiwgIm9wdGlvbnMiOiBbImlQb2QiLCAiaVBob25lIiwgImlNYWMiLCAiV2Fsa21hbiJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMSDCtyBMZXZlbiBpbiBkZSAwMHMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrIGFwcGFyYWF0IGxpZXQgU3RldmUgSm9icyBpbiAyMDA3IHZvb3IgaGV0IGVlcnN0IHppZW4/IiwgIm9wdGlvbnMiOiBbImlQYWQiLCAiaVBob25lIiwgIkFwcGxlIFdhdGNoIiwgIk1hY0Jvb2siXSwgImNvcnJlY3QiOiAxLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDEgwrcgTGV2ZW4gaW4gZGUgMDBzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiT3Agd2Vsa2UgTmVkZXJsYW5kc2Ugc2l0ZSBnYWYgamUgZWxrYWFyICdyZXNwZWN0Jz8iLCAib3B0aW9ucyI6IFsiRmFjZWJvb2siLCAiTXlzcGFjZSIsICJUd2l0dGVyIiwgIkh5dmVzIl0sICJjb3JyZWN0IjogMywgIm11bHQiOiAxfSwgeyJyb3VuZCI6ICJSb25kZSAxIMK3IExldmVuIGluIGRlIDAwcyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIk1ldCB3ZWxrIHByb2dyYW1tYSBjaGF0dGUgamUgbmEgc2Nob29sIG1ldCBqZSBrbGFzZ2Vub3Rlbj8iLCAib3B0aW9ucyI6IFsiV2hhdHNBcHAiLCAiTVNOIE1lc3NlbmdlciIsICJTbmFwY2hhdCIsICJUaWtUb2siXSwgImNvcnJlY3QiOiAxLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDEgwrcgTGV2ZW4gaW4gZGUgMDBzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiT3Agd2Vsa2UgdGVsZWZvb24gc3BlZWxkZSBqZSBTbmFrZT8iLCAib3B0aW9ucyI6IFsiTm9raWEgMzMxMCIsICJpUGhvbmUiLCAiU2Ftc3VuZyBHYWxheHkiLCAiQmxhY2tCZXJyeSJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMSDCtyBMZXZlbiBpbiBkZSAwMHMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrIHNvY2lhYWwgbmV0d2VyayBiZWdvbiBNYXJrIFp1Y2tlcmJlcmcgaW4gMjAwND8iLCAib3B0aW9ucyI6IFsiSHl2ZXMiLCAiVHdpdHRlciIsICJGYWNlYm9vayIsICJJbnN0YWdyYW0iXSwgImNvcnJlY3QiOiAyLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDEgwrcgTGV2ZW4gaW4gZGUgMDBzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2Vsa2UgdmlkZW9zaXRlIHdlcmQgaW4gMjAwNSBvcGdlcmljaHQ/IiwgIm9wdGlvbnMiOiBbIllvdVR1YmUiLCAiVGlrVG9rIiwgIk5ldGZsaXgiLCAiSW5zdGFncmFtIl0sICJjb3JyZWN0IjogMCwgIm11bHQiOiAxfSwgeyJyb3VuZCI6ICJSb25kZSAxIMK3IExldmVuIGluIGRlIDAwcyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGtlIHpvZWttYWNoaW5lIHdlcmQgaW4gZGUgMDBzIHpvIGdyb290IGRhdCBoZXQgZWVuIHdlcmt3b29yZCB3ZXJkPyIsICJvcHRpb25zIjogWyJZYWhvbyIsICJHb29nbGUiLCAiSWxzZSIsICJBbHRhVmlzdGEiXSwgImNvcnJlY3QiOiAxLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDEgwrcgTGV2ZW4gaW4gZGUgMDBzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiSG9ldmVlbCB0ZWtlbnMgbW9jaHQgw6nDqW4gc21zJ2plIG1heGltYWFsIGhlYmJlbj8iLCAib3B0aW9ucyI6IFsiMTAwIiwgIjE0MCIsICIyODAiLCAiMTYwIl0sICJjb3JyZWN0IjogMywgIm11bHQiOiAxfSwgeyJyb3VuZCI6ICJSb25kZSAyIMK3IFNwb3J0IiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiU2FtZW4gbWV0IHdlbGsgbGFuZCBvcmdhbmlzZWVyZGUgTmVkZXJsYW5kIGhldCBFSyB2b2V0YmFsIHZhbiAyMDAwPyIsICJvcHRpb25zIjogWyJEdWl0c2xhbmQiLCAiRnJhbmtyaWprIiwgIkJlbGdpw6siLCAiRW5nZWxhbmQiXSwgImNvcnJlY3QiOiAyLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDIgwrcgU3BvcnQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJJbiB3ZWxrIGxhbmQgd2VyZCBoZXQgV0sgdm9ldGJhbCB2YW4gMjAwNiBnZXNwZWVsZD8iLCAib3B0aW9ucyI6IFsiRHVpdHNsYW5kIiwgIkJyYXppbGnDqyIsICJKYXBhbiIsICJTcGFuamUiXSwgImNvcnJlY3QiOiAwLCAibXVsdCI6IDF9LCB7InJvdW5kIjogIlJvbmRlIDIgwrcgU3BvcnQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBad2l0c2Vyc2UgdGVubmlzc2VyIHdvbiB0dXNzZW4gMjAwMyBlbiAyMDA3IHZpamYga2VlciBvcCByaWogV2ltYmxlZG9uPyIsICJvcHRpb25zIjogWyJSYWZhZWwgTmFkYWwiLCAiQW5keSBNdXJyYXkiLCAiUm9nZXIgRmVkZXJlciIsICJOb3ZhayBEam9rb3ZpYyJdLCAiY29ycmVjdCI6IDIsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMiDCtyBTcG9ydCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGtlIHN1cGVyc25lbGxlIEphbWFpY2FhbiB3b24gaW4gMjAwOCBnb3VkIG9wIGRlIDEwMCBtZXRlcj8iLCAib3B0aW9ucyI6IFsiVXNhaW4gQm9sdCIsICJDYXJsIExld2lzIiwgIkFzYWZhIFBvd2VsbCIsICJZb2hhbiBCbGFrZSJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMiDCtyBTcG9ydCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGsgbGFuZCB3b24gdmVycmFzc2VuZCBoZXQgRUsgdm9ldGJhbCB2YW4gMjAwND8iLCAib3B0aW9ucyI6IFsiR3JpZWtlbmxhbmQiLCAiQnJhemlsacOrIiwgIkphcGFuIiwgIkNhbmFkYSJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMiDCtyBTcG9ydCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGsgbGFuZCB3ZXJkIGluIDIwMDYgd2VyZWxka2FtcGlvZW4gdm9ldGJhbD8iLCAib3B0aW9ucyI6IFsiRnJhbmtyaWprIiwgIkl0YWxpw6siLCAiRHVpdHNsYW5kIiwgIkJyYXppbGnDqyJdLCAiY29ycmVjdCI6IDEsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMiDCtyBTcG9ydCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGtlIE5lZGVybGFuZHNlIHp3ZW1zdGVyIHdvbiBpbiBTeWRuZXkgMjAwMCBkcmllIGtlZXIgZ291ZD8iLCAib3B0aW9ucyI6IFsiUmFub21pIEtyb21vd2lkam9qbyIsICJGZW1rZSBIZWVtc2tlcmsiLCAiSW5nZSBkZSBCcnVpam4iLCAiTWFybGVlbiBWZWxkaHVpcyJdLCAiY29ycmVjdCI6IDIsICJtdWx0IjogMX0sIHsicm91bmQiOiAiUm9uZGUgMiDCtyBTcG9ydCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIlRlZ2VuIHdlbGsgbGFuZCB2ZXJsb29yIE9yYW5qZSBkZSBXSy1maW5hbGUgdmFuIDIwMTA/IiwgIm9wdGlvbnMiOiBbIkR1aXRzbGFuZCIsICJCcmF6aWxpw6siLCAiQXJnZW50aW5pw6siLCAiU3BhbmplIl0sICJjb3JyZWN0IjogMywgIm11bHQiOiAxfSwgeyJyb3VuZCI6ICJSb25kZSAzIMK3IE5pZXV3cyAmIHdlcmVsZCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldpZSB3ZXJkIGluIDIwMDggZ2Vrb3plbiBhbHMgcHJlc2lkZW50IHZhbiBBbWVyaWthPyIsICJvcHRpb25zIjogWyJCYXJhY2sgT2JhbWEiLCAiR2VvcmdlIFcuIEJ1c2giLCAiRG9uYWxkIFRydW1wIiwgIkJpbGwgQ2xpbnRvbiJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSAzIMK3IE5pZXV3cyAmIHdlcmVsZCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIkluIHdlbGtlIHN0YWQgd2FyZW4gZGUgT2x5bXBpc2NoZSBTcGVsZW4gdmFuIDIwMDg/IiwgIm9wdGlvbnMiOiBbIkxvbmRlbiIsICJQZWtpbmciLCAiQXRoZW5lIiwgIlN5ZG5leSJdLCAiY29ycmVjdCI6IDEsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSAzIMK3IE5pZXV3cyAmIHdlcmVsZCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIkluIHdlbGsgbGFuZCBrd2FtZW4gZGUgT2x5bXBpc2NoZSBTcGVsZW4gaW4gMjAwNCAndGh1aXMnPyIsICJvcHRpb25zIjogWyJJdGFsacOrIiwgIlNwYW5qZSIsICJHcmlla2VubGFuZCIsICJUdXJraWplIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAxLjV9LCB7InJvdW5kIjogIlJvbmRlIDMgwrcgTmlldXdzICYgd2VyZWxkIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2FhciB3YXMgaWVkZXJlZW4gYmFuZyB2b29yIGJpaiBkZSBvdmVyZ2FuZyBuYWFyIGhldCBqYWFyIDIwMDA/IiwgIm9wdGlvbnMiOiBbIkVlbiB6b25zdmVyZHVpc3RlcmluZyIsICJFZW4gc3Ryb29tc3RvcmluZyBpbiBFdXJvcGEiLCAiRWVuIHRla29ydCBhYW4gdnV1cndlcmsiLCAiRGUgbWlsbGVubml1bWJ1ZyJdLCAiY29ycmVjdCI6IDMsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSAzIMK3IE5pZXV3cyAmIHdlcmVsZCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIk1ldCB3aWUgdHJvdXdkZSBNw6F4aW1hIGluIDIwMDI/IiwgIm9wdGlvbnMiOiBbIldpbGxlbS1BbGV4YW5kZXIiLCAiQ29uc3RhbnRpam4iLCAiRnJpc28iLCAiUGlldGVyLUNocmlzdGlhYW4iXSwgImNvcnJlY3QiOiAwLCAibXVsdCI6IDEuNX0sIHsicm91bmQiOiAiUm9uZGUgMyDCtyBOaWV1d3MgJiB3ZXJlbGQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXaWUgd2FzIGluIGRlIGphcmVuIDAwIGtvbmluZ2luIHZhbiBOZWRlcmxhbmQ/IiwgIm9wdGlvbnMiOiBbIkp1bGlhbmEiLCAiQmVhdHJpeCIsICJNw6F4aW1hIiwgIldpbGhlbG1pbmEiXSwgImNvcnJlY3QiOiAxLCAibXVsdCI6IDEuNX0sIHsicm91bmQiOiAiUm9uZGUgNCDCtyBGaWxtIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2Vsa2UgdG92ZW5hYXJzbGVlcmxpbmcga3JlZWcgaW4gMjAwMSB6aWpuIGVlcnN0ZSBmaWxtPyIsICJvcHRpb25zIjogWyJGcm9kbyIsICJIYXJyeSBQb3R0ZXIiLCAiUGVyY3kgSmFja3NvbiIsICJNZXJsaWpuIl0sICJjb3JyZWN0IjogMSwgIm11bHQiOiAxLjV9LCB7InJvdW5kIjogIlJvbmRlIDQgwrcgRmlsbSIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIkluIHdlbGtlIGZpbG1zZXJpZSB1aXQgMjAwMS0yMDAzIG1vZXQgZWVuIHJpbmcgdmVybmlldGlnZCB3b3JkZW4/IiwgIm9wdGlvbnMiOiBbIkhhcnJ5IFBvdHRlciIsICJOYXJuaWEiLCAiVGhlIExvcmQgb2YgdGhlIFJpbmdzIiwgIlN0YXIgV2FycyJdLCAiY29ycmVjdCI6IDIsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSA0IMK3IEZpbG0iLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJIb2UgaGVldCBkZSBwaXJhYXQgZGllIEpvaG5ueSBEZXBwIHNwZWVsdCBpbiBQaXJhdGVzIG9mIHRoZSBDYXJpYmJlYW4/IiwgIm9wdGlvbnMiOiBbIkthcGl0ZWluIEhhYWsiLCAiQmxhY2tiZWFyZCIsICJEYXZ5IEpvbmVzIiwgIkphY2sgU3BhcnJvdyJdLCAiY29ycmVjdCI6IDMsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSA0IMK3IEZpbG0iLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBncm9lbmUgb2dlciB3b29udCBpbiBlZW4gbW9lcmFzIGVuIGtyZWVnIGluIDIwMDEgZWVuIGZpbG0/IiwgIm9wdGlvbnMiOiBbIlNocmVrIiwgIkh1bGsiLCAiWW9kYSIsICJLZXJtaXQiXSwgImNvcnJlY3QiOiAwLCAibXVsdCI6IDEuNX0sIHsicm91bmQiOiAiUm9uZGUgNCDCtyBGaWxtIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2Vsa2UgUGl4YXItZmlsbSB1aXQgMjAwMyBnYWF0IG92ZXIgZWVuIHZlcm1pc3RlIGNsb3dudmlzPyIsICJvcHRpb25zIjogWyJDYXJzIiwgIkZpbmRpbmcgTmVtbyIsICJSYXRhdG91aWxsZSIsICJVcCJdLCAiY29ycmVjdCI6IDEsICJtdWx0IjogMS41fSwgeyJyb3VuZCI6ICJSb25kZSA0IMK3IEZpbG0iLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBnZWxlIHRla2VuZmlsbWZhbWlsaWUga3JlZWcgaW4gMjAwNyBlZW4gZWlnZW4gYmlvc2Nvb3BmaWxtPyIsICJvcHRpb25zIjogWyJGYW1pbHkgR3V5IiwgIlRoZSBTaW1wc29ucyIsICJTb3V0aCBQYXJrIiwgIkZ1dHVyYW1hIl0sICJjb3JyZWN0IjogMSwgIm11bHQiOiAxLjV9LCB7InJvdW5kIjogIlJvbmRlIDUgwrcgVHYiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJJbiB3ZWxrIHR2LXByb2dyYW1tYSB3ZXJkZW4gYmV3b25lcnMgdmFuIGVlbiBodWlzIGRlIGhlbGUgZGFnIGdlZmlsbWQ/IiwgIm9wdGlvbnMiOiBbIklkb2xzIiwgIkJvZXIgem9la3QgVnJvdXciLCAiQmlnIEJyb3RoZXIiLCAiRXhwZWRpdGllIFJvYmluc29uIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA1IMK3IFR2IiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiSW4gd2Vsa2UgdGFsZW50ZW5qYWNodCB3b24gSmFtYWkgaW4gMjAwMz8iLCAib3B0aW9ucyI6IFsiVGhlIFZvaWNlIiwgIlggRmFjdG9yIiwgIlBvcHN0YXJzIiwgIklkb2xzIl0sICJjb3JyZWN0IjogMywgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA1IMK3IFR2IiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiSW4gd2Vsa2Ugc2VyaWUsIGRpZSBpbiAyMDA0IHN0b3B0ZSwgemF0ZW4gUmFjaGVsLCBSb3NzIGVuIEpvZXk/IiwgIm9wdGlvbnMiOiBbIlNlaW5mZWxkIiwgIkhvdyBJIE1ldCBZb3VyIE1vdGhlciIsICJGcmllbmRzIiwgIlRoZSBPLkMuIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA1IMK3IFR2IiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2llIHdvb250IGVyIGluIGVlbiBhbmFuYXMgb25kZXIgZGUgemVlPyIsICJvcHRpb25zIjogWyJQYXRyaWNrIFN0ZXIiLCAiTmVtbyIsICJPY3RvIiwgIlNwb25nZUJvYiJdLCAiY29ycmVjdCI6IDMsICJtdWx0IjogMn0sIHsicm91bmQiOiAiUm9uZGUgNSDCtyBUdiIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldlbGtlIFJUTCA0LXNvYXAgaXMgYWwgc2luZHMgMTk5MCBlbGtlIHdlcmtkYWcgb3AgdHY/IiwgIm9wdGlvbnMiOiBbIkdvZWRlIFRpamRlbiwgU2xlY2h0ZSBUaWpkZW4iLCAiT25kZXJ3ZWcgbmFhciBNb3JnZW4iLCAiV2VzdGVud2luZCIsICJab29wIl0sICJjb3JyZWN0IjogMCwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA2IMK3IEdhbWVzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiQmlqIHdlbGtlIE5pbnRlbmRvIHVpdCAyMDA2IHp3YWFpZGUgamUgbWV0IGplIGFybSBvbSB0ZSBib3dsZW4gb2YgdGVubmlzc2VuPyIsICJvcHRpb25zIjogWyJXaWkiLCAiR2FtZUN1YmUiLCAiU3dpdGNoIiwgIkdhbWUgQm95Il0sICJjb3JyZWN0IjogMCwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA2IMK3IEdhbWVzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiV2Vsa2Ugc3BlbGNvbXB1dGVyIGJyYWNodCBTb255IGluIDIwMDAgdWl0PyIsICJvcHRpb25zIjogWyJYYm94IiwgIlBsYXlTdGF0aW9uIDIiLCAiR2FtZUN1YmUiLCAiV2lpIl0sICJjb3JyZWN0IjogMSwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA2IMK3IEdhbWVzIiwgInR5cGUiOiAibWMiLCAibGltaXQiOiAxNSwgInRleHQiOiAiSW4gd2VsayBzcGVsIHVpdCAyMDAwIGJlc3R1dXJkZSBqZSBoZXQgbGV2ZW4gdmFuIHZpcnR1ZWxlIG1lbnNqZXM/IiwgIm9wdGlvbnMiOiBbIlNpbUNpdHkiLCAiSGFiYm8iLCAiRGUgU2ltcyIsICJNaW5lY3JhZnQiXSwgImNvcnJlY3QiOiAyLCAibXVsdCI6IDJ9LCB7InJvdW5kIjogIlJvbmRlIDYgwrcgR2FtZXMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSB2b2V0YmFsZ2FtZSBrd2FtIGVsayBqYWFyIHVpdCBlbiB3b24gaGV0IHZhbiBQcm8gRXZvbHV0aW9uIFNvY2Nlcj8iLCAib3B0aW9ucyI6IFsiRm9vdGJhbGwgTWFuYWdlciIsICJSb2NrZXQgTGVhZ3VlIiwgIk1hcmlvIFN0cmlrZXJzIiwgIkZJRkEiXSwgImNvcnJlY3QiOiAzLCAibXVsdCI6IDJ9LCB7InJvdW5kIjogIlJvbmRlIDYgwrcgR2FtZXMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBvbmxpbmUgZ2FtZSB1aXQgMjAwNCBzcGVlbGRlIHppY2ggYWYgaW4gZGUgd2VyZWxkIEF6ZXJvdGg/IiwgIm9wdGlvbnMiOiBbIldvcmxkIG9mIFdhcmNyYWZ0IiwgIlJ1bmVTY2FwZSIsICJGb3J0bml0ZSIsICJNaW5lY3JhZnQiXSwgImNvcnJlY3QiOiAwLCAibXVsdCI6IDJ9LCB7InJvdW5kIjogIlJvbmRlIDYgwrcgR2FtZXMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXYXQgaXMgZGUgYmVrZW5kc3RlIGdlbGUgUG9rw6ltb24/IiwgIm9wdGlvbnMiOiBbIkJ1bGJhc2F1ciIsICJQaWthY2h1IiwgIkNoYXJtYW5kZXIiLCAiU3F1aXJ0bGUiXSwgImNvcnJlY3QiOiAxLCAibXVsdCI6IDJ9LCB7InJvdW5kIjogIlJvbmRlIDYgwrcgR2FtZXMiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJJbiB3ZWxrIG9ubGluZSBwaXhlbGhvdGVsIGhpbmcgamUgbmEgc2Nob29sIHJvbmQ/IiwgIm9wdGlvbnMiOiBbIlNlY29uZCBMaWZlIiwgIkNsdWIgUGVuZ3VpbiIsICJIYWJibyIsICJOZW9wZXRzIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAyfSwgeyJyb3VuZCI6ICJSb25kZSA3IMK3IE1vZGUgJiBzcGVlbGdvZWQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBydWJiZXJlbiBrbG9tcGVuIG1ldCBnYWF0amVzIGRyb2VnIGluZWVucyBpZWRlcmVlbj8iLCAib3B0aW9ucyI6IFsiVWdncyIsICJIZWVseXMiLCAiVmFucyIsICJDcm9jcyJdLCAiY29ycmVjdCI6IDMsICJtdWx0IjogMi41fSwgeyJyb3VuZCI6ICJSb25kZSA3IMK3IE1vZGUgJiBzcGVlbGdvZWQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBsYWFyemVuIHZhbiBzY2hhcGVudmFjaHQgd2FyZW4gZWVuIGVub3JtZSBoaXQ/IiwgIm9wdGlvbnMiOiBbIlVnZ3MiLCAiQ3JvY3MiLCAiRHIuIE1hcnRlbnMiLCAiVGltYmVybGFuZCJdLCAiY29ycmVjdCI6IDAsICJtdWx0IjogMi41fSwgeyJyb3VuZCI6ICJSb25kZSA3IMK3IE1vZGUgJiBzcGVlbGdvZWQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBzbmVha2VycyBoYWRkZW4gZWVuIHdpZWx0amUgaW4gZGUgaGFrPyIsICJvcHRpb25zIjogWyJDcm9jcyIsICJIZWVseXMiLCAiQnVmZmFsbydzIiwgIkFsbCBTdGFycyJdLCAiY29ycmVjdCI6IDEsICJtdWx0IjogMi41fSwgeyJyb3VuZCI6ICJSb25kZSA3IMK3IE1vZGUgJiBzcGVlbGdvZWQiLCAidHlwZSI6ICJtYyIsICJsaW1pdCI6IDE1LCAidGV4dCI6ICJXZWxrZSBwb3BwZW4gbWV0IGdyb3RlIGhvb2ZkZW4gd2FyZW4gdmFuYWYgMjAwMSBkZSBjb25jdXJyZW50IHZhbiBCYXJiaWU/IiwgIm9wdGlvbnMiOiBbIlBvbGx5IFBvY2tldCIsICJCYWJ5IEJvcm4iLCAiQnJhdHoiLCAiTW9uc3RlciBIaWdoIl0sICJjb3JyZWN0IjogMiwgIm11bHQiOiAyLjV9LCB7InJvdW5kIjogIlJvbmRlIDcgwrcgTW9kZSAmIHNwZWVsZ29lZCIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIldhdCBnZWJldXJ0IGVyIGFscyBqZSBNZW50b3MgaW4gZWVuIGZsZXMgY29sYSBnb29pdCwgZWVuIGhpdCBvcCBZb3VUdWJlIGluIDIwMDY/IiwgIm9wdGlvbnMiOiBbIkhldCB3b3JkdCBibGF1dyIsICJIZXQgYmV2cmllc3QiLCAiRXIgZ2ViZXVydCBuaWV0cyIsICJFciBzcHVpdCBlZW4gZm9udGVpbiB1aXQiXSwgImNvcnJlY3QiOiAzLCAibXVsdCI6IDIuNX0sIHsicm91bmQiOiAiUm9uZGUgOCDCtyBNdXppZWsgdWl0IGRlIDAwcyIsICJ0eXBlIjogIm11c2ljIiwgImxpbWl0IjogNDAsICJ0ZXh0IjogIkx1aXN0ZXIhIFdpZSB6aW5ndCBkaXQ/IiwgIm9wdGlvbnMiOiBbIkJleW9uY8OpIiwgIkplbm5pZmVyIExvcGV6IiwgIlNoYWtpcmEiLCAiUmloYW5uYSJdLCAiY29ycmVjdCI6IDIsICJob3N0IjogIlNwZWVsIGFmOiBTaGFraXJhIOKAkyBIaXBzIERvbid0IExpZSAoMjAwNikiLCAic29uZyI6ICJTaGFraXJhIEhpcHMgRG9uJ3QgTGllIiwgIm11bHQiOiAzfSwgeyJyb3VuZCI6ICJSb25kZSA4IMK3IE11emllayB1aXQgZGUgMDBzIiwgInR5cGUiOiAibXVzaWMiLCAibGltaXQiOiA0MCwgInRleHQiOiAiTHVpc3RlciEgV2llIHppbmd0IGRpdD8iLCAib3B0aW9ucyI6IFsiQmV5b25jw6kiLCAiQWxpY2lhIEtleXMiLCAiQ2hyaXN0aW5hIEFndWlsZXJhIiwgIktlbGx5IFJvd2xhbmQiXSwgImNvcnJlY3QiOiAwLCAiaG9zdCI6ICJTcGVlbCBhZjogQmV5b25jw6kg4oCTIENyYXp5IGluIExvdmUgKDIwMDMpIiwgInNvbmciOiAiQmV5b25jw6kgQ3JhenkgaW4gTG92ZSIsICJtdWx0IjogM30sIHsicm91bmQiOiAiUm9uZGUgOCDCtyBNdXppZWsgdWl0IGRlIDAwcyIsICJ0eXBlIjogIm11c2ljIiwgImxpbWl0IjogNDAsICJ0ZXh0IjogIkx1aXN0ZXIhIFdlbGtlIGJhbmQgaXMgZGl0PyIsICJvcHRpb25zIjogWyJDb2xkcGxheSIsICJUaGUgS2lsbGVycyIsICJLZWFuZSIsICJNdXNlIl0sICJjb3JyZWN0IjogMSwgImhvc3QiOiAiU3BlZWwgYWY6IFRoZSBLaWxsZXJzIOKAkyBNci4gQnJpZ2h0c2lkZSAoMjAwNCkiLCAic29uZyI6ICJUaGUgS2lsbGVycyBNci4gQnJpZ2h0c2lkZSIsICJtdWx0IjogM30sIHsicm91bmQiOiAiUm9uZGUgOCDCtyBNdXppZWsgdWl0IGRlIDAwcyIsICJ0eXBlIjogIm11c2ljIiwgImxpbWl0IjogNDAsICJ0ZXh0IjogIkx1aXN0ZXIhIFdpZSB6aW5ndCBkaXQ/IiwgIm9wdGlvbnMiOiBbIkF2cmlsIExhdmlnbmUiLCAiUGluayIsICJDaHJpc3RpbmEgQWd1aWxlcmEiLCAiQnJpdG5leSBTcGVhcnMiXSwgImNvcnJlY3QiOiAzLCAiaG9zdCI6ICJTcGVlbCBhZjogQnJpdG5leSBTcGVhcnMg4oCTIFRveGljICgyMDA0KSIsICJzb25nIjogIkJyaXRuZXkgU3BlYXJzIFRveGljIiwgIm11bHQiOiAzfSwgeyJyb3VuZCI6ICJSb25kZSA4IMK3IE11emllayB1aXQgZGUgMDBzIiwgInR5cGUiOiAibXVzaWMiLCAibGltaXQiOiA0MCwgInRleHQiOiAiTHVpc3RlciEgV2llIHppbmd0IGRpdD8iLCAib3B0aW9ucyI6IFsiUmloYW5uYSIsICJDaWFyYSIsICJLZWxseSBDbGFya3NvbiIsICJOZWxseSBGdXJ0YWRvIl0sICJjb3JyZWN0IjogMCwgImhvc3QiOiAiU3BlZWwgYWY6IFJpaGFubmEg4oCTIFVtYnJlbGxhICgyMDA3KSIsICJzb25nIjogIlJpaGFubmEgVW1icmVsbGEiLCAibXVsdCI6IDN9LCB7InJvdW5kIjogIlJvbmRlIDggwrcgTXV6aWVrIHVpdCBkZSAwMHMiLCAidHlwZSI6ICJtdXNpYyIsICJsaW1pdCI6IDQwLCAidGV4dCI6ICJMdWlzdGVyISBVaXQgd2VsayBsYW5kIGtvbXQgZGV6ZSB6b21lcmhpdCB1aXQgMjAwND8iLCAib3B0aW9ucyI6IFsiU3BhbmplIiwgIk1vbGRhdmnDqyIsICJad2VkZW4iLCAiQnJhemlsacOrIl0sICJjb3JyZWN0IjogMSwgImhvc3QiOiAiU3BlZWwgYWY6IE8tWm9uZSDigJMgRHJhZ29zdGVhIERpbiBUZWkiLCAic29uZyI6ICJPLVpvbmUgRHJhZ29zdGVhIERpbiBUZWkiLCAibXVsdCI6IDN9LCB7InJvdW5kIjogIlJvbmRlIDkgwrcgT3BkcmFjaHRlbiIsICJ0eXBlIjogInRhc2siLCAidGV4dCI6ICJVaXRiZWVsZGVuISBPbSBkZSBiZXVydCBiZWVsZHQgaWVtYW5kIHpvbmRlciB3b29yZGVuIGlldHMgdWl0IGRlIDAwcyB1aXQgZGF0IGRlIHNwZWxsZWlkZXIgZmx1aXN0ZXJ0LiBXaWUgaGV0IGFscyBlZXJzdGUgcmFhZHQsIGtyaWpndCBkZSBwdW50ZW4uIERlIHVpdGJlZWxkZXIgb29rIGFscyBoZXQgYmlubmVuIDMwIHNlY29uZGVuIGdlcmFkZW4gaXMuIiwgImhvc3QiOiAiV29vcmRlbjogVGFtYWdvdGNoaSwgTm9raWEgMzMxMCwgTVNOLCBIeXZlcywgV2lpLCBpUG9kLCBCaWcgQnJvdGhlciwgSGFycnkgUG90dGVyLCBDcm9jcywgSWRvbHMuIFRpcDogcmFkZW4gKzUwMCwgdWl0YmVlbGRlciArMjUwLiIsICJtdWx0IjogM30sIHsicm91bmQiOiAiUm9uZGUgOSDCtyBPcGRyYWNodGVuIiwgInR5cGUiOiAidGFzayIsICJ0ZXh0IjogIk5ldXJpw6tuISBPbSBkZSBiZXVydCBuZXVyaWV0IGllbWFuZCBlZW4gaGl0IHVpdCBkZSAwMHMgZGllIGRlIHNwZWxsZWlkZXIgZmx1aXN0ZXJ0LiBXaWUgaGV0IG51bW1lciBhbHMgZWVyc3RlIHJhYWR0LCBrcmlqZ3QgZGUgcHVudGVuLiIsICJob3N0IjogIkhpdHM6IEhpcHMgRG9uJ3QgTGllLCBDcmF6eSBpbiBMb3ZlLCBUb3hpYywgVW1icmVsbGEsIE1yLiBCcmlnaHRzaWRlLCBEcmFnb3N0ZWEgRGluIFRlaS4gVGlwOiByYWRlbiArNTAwLiIsICJtdWx0IjogM30sIHsicm91bmQiOiAiRmluYWxlIMK3IE9wIG5hYXIgMjAyNyDCtyBhbGxlcyBvZiBuaWV0cyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIkluIHdlbGsgamFhciB3YXMgZGUgbWlsbGVubml1bXdpc3NlbGluZz8iLCAib3B0aW9ucyI6IFsiMTk5OSIsICIyMDAwIiwgIjIwMDEiLCAiMTk5MCJdLCAiY29ycmVjdCI6IDEsICJtdWx0IjogNX0sIHsicm91bmQiOiAiRmluYWxlIMK3IE9wIG5hYXIgMjAyNyDCtyBhbGxlcyBvZiBuaWV0cyIsICJ0eXBlIjogIm1jIiwgImxpbWl0IjogMTUsICJ0ZXh0IjogIkhvZSBvdWQgd29yZCBqZSBpbiAyMDI3IGFscyBqZSBpbiAxOTkyIGdlYm9yZW4gYmVudD8iLCAib3B0aW9ucyI6IFsiMzMiLCAiMzQiLCAiMzUiLCAiMzYiXSwgImNvcnJlY3QiOiAyLCAibXVsdCI6IDV9LCB7InJvdW5kIjogIkZpbmFsZSDCtyBPcCBuYWFyIDIwMjcgwrcgYWxsZXMgb2YgbmlldHMiLCAidHlwZSI6ICJ0YXNrIiwgInRleHQiOiAiVG9vc3QhIEllZGVyZWVuIGhvdWR0IG9tIGRlIGJldXJ0IGVlbiB0b29zdCB2YW4gbWF4aW1hYWwgMzAgc2Vjb25kZW4gb3AgMjAyNywgbWV0IG1pbnN0ZW5zIMOpw6luIGhlcmlubmVyaW5nIGFhbiBkZSAwMHMuIiwgImhvc3QiOiAiTW9vaXN0ZSB0b29zdCArMTAwMCwgZGUgcmVzdCArNTAwLiIsICJtdWx0IjogNX1dfQ=="),c=>c.charCodeAt(0))));</script>
+<script>
+/* ---------- Verbinding: de spelleider is de server, telefoons verbinden rechtstreeks ---------- */
+(function(){
+  const QS=new URLSearchParams(location.search);
+  const JOIN=QS.get('join');
+  const IS_HOST=!JOIN;
+  const PEER_OPTS=QS.get('peerhost')?{host:QS.get('peerhost'),port:+(QS.get('peerport')||9000),path:'/',secure:false,debug:0}:{debug:0};
+  const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+  const rid=(n=10)=>Array.from(crypto.getRandomValues(new Uint8Array(n)),b=>'abcdefghijkmnpqrstuvwxyz23456789'[b%32]).join('');
+  const PUBLIC=p=>p==='game/state'||p.startsWith('players/');
+  const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
+  const NET=window.NET={tv:!!QS.get('tv')&&!IS_HOST,host:IS_HOST,status:'connecting',peers:0,hostId:null,pid:null,onchange:()=>{}};
+
+  /* gedeelde in-memory database met dezelfde vorm als de Claude-versie */
+  function makeStore(data,writer){
+    let subs=[];const ready={v:false};
+    const notify=()=>{if(!ready.v)return;setTimeout(()=>subs.slice().forEach(f=>{try{f();}catch(e){console.error(e);}}),0);};
+    const snap=p=>({id:p.split('/').pop(),exists:data[p]!==undefined,data:()=>clone(data[p]),metadata:{fromCache:false,hasPendingWrites:false}});
+    function doc(p){return{path:p,id:p.split('/').pop(),get:async()=>snap(p),
+      set:async v=>writer(p,clone(v)),update:async v=>writer(p,Object.assign({},data[p],clone(v))),delete:async()=>writer(p,null),
+      onSnapshot(n){const f=()=>n(snap(p));subs.push(f);if(ready.v)setTimeout(f,0);return()=>{subs=subs.filter(x=>x!==f);};},
+      collection:c=>col(p+'/'+c)};}
+    function col(p){const n=p.split('/').length;const q=()=>{const docs=Object.keys(data).filter(k=>k.startsWith(p+'/')&&k.split('/').length===n+1).sort().map(snap);return{docs,size:docs.length,empty:!docs.length,metadata:{fromCache:false}};};
+      return{path:p,doc:id=>doc(p+'/'+(id||rid())),get:async()=>q(),
+        onSnapshot(nx){const f=()=>nx(q());subs.push(f);if(ready.v)setTimeout(f,0);return()=>{subs=subs.filter(x=>x!==f);};}};}
+    return{db:{doc,collection:col},data,notify,setReady(){ready.v=true;notify();}};
+  }
+
+  let store,peer;
+  if(IS_HOST){
+    /* ---------- spelleider ---------- */
+    NET.hostId=LS.get('okq-hostid',null)||('okq-'+rid(12));LS.set('okq-hostid',NET.hostId);
+    NET.pid='host';
+    const saved=LS.get('okq-data',{});
+    const conns=new Map();
+    let saveT=0;
+    const persist=()=>{clearTimeout(saveT);saveT=setTimeout(()=>{const d={};for(const k in store.data)if(k!=='quiz/bank')d[k]=store.data[k];LS.set('okq-data',d);},300);};
+    const broadcast=(msg)=>{for(const c of conns.values()){try{if(c.open)c.send(msg);}catch(e){}}};
+    const apply=(p,v)=>{if(v===null)delete store.data[p];else store.data[p]=v;persist();store.notify();if(PUBLIC(p))broadcast({t:'put',p,v});};
+    store=makeStore(saved,async(p,v)=>apply(p,v));
+    store.data['quiz/bank']=window.__BANK;
+    if(!store.data['game/state'])store.data['game/state']={phase:'lobby',seq:0,idx:-1,q:null,openedAt:0,reveal:null,scores:{},done:[]};
+    store.setReady();
+    const publicSnap=()=>{const d={};for(const k in store.data)if(PUBLIC(k))d[k]=store.data[k];return d;};
+    const status=()=>{NET.peers=[...conns.values()].filter(c=>c.open).length;NET.onchange();};
+    function start(){
+      NET.status='connecting';NET.onchange();
+      peer=new Peer(NET.hostId,PEER_OPTS);
+      peer.on('open',()=>{NET.status='online';NET.onchange();});
+      peer.on('connection',c=>{
+        c.on('open',()=>{status();});
+        c.on('data',m=>{
+          if(!m||typeof m!=='object')return;
+          if(m.t==='hello'&&typeof m.pid==='string'&&/^[a-z0-9]{6,20}$/.test(m.pid)){c.__pid=m.pid;conns.set(c.connectionId,c);c.send({t:'snap',d:publicSnap()});status();return;}
+          const pid=c.__pid;if(!pid)return;
+          if(m.t==='write'&&(m.p==='players/'+pid||m.p==='answers/'+pid)){
+            let v=m.v;
+            if(v!==null&&(typeof v!=='object'||JSON.stringify(v).length>200000))return;
+            if(m.p.startsWith('players/')&&v){v={name:String(v.name||'').slice(0,20),photo:typeof v.photo==='string'&&v.photo.startsWith('data:image/')?v.photo:undefined};if(!v.photo)delete v.photo;}
+            if(m.p.startsWith('answers/')&&v){v={seq:+v.seq,c:+v.c,ms:+v.ms};}
+            apply(m.p,v);
+          }
+        });
+        c.on('close',()=>{conns.delete(c.connectionId);status();});
+        c.on('error',()=>{conns.delete(c.connectionId);status();});
+      });
+      peer.on('disconnected',()=>{NET.status='reconnecting';NET.onchange();setTimeout(()=>{try{peer.reconnect();}catch(e){}},1500);});
+      peer.on('error',e=>{
+        if(e.type==='unavailable-id'){NET.status='waiting';NET.onchange();try{peer.destroy();}catch(_){}setTimeout(start,3000);}
+        else if(['network','server-error','socket-error','socket-closed'].includes(e.type)){NET.status='reconnecting';NET.onchange();try{peer.destroy();}catch(_){}setTimeout(start,3000);}
+      });
+    }
+    start();
+    NET.joinUrl=()=>{const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('join',NET.hostId);if(QS.get('peerhost')){u.searchParams.set('peerhost',QS.get('peerhost'));u.searchParams.set('peerport',QS.get('peerport')||'9000');}return u.toString();};
+    NET.tvUrl=()=>{const u=new URL(NET.joinUrl());u.searchParams.set('tv','1');return u.toString();};
+    NET.newGame=()=>{LS.set('okq-data',{});location.reload();};
+  }else{
+    /* ---------- speler ---------- */
+    NET.hostId=JOIN;
+    if(NET.tv){NET.pid='tv'+rid(8);}else{NET.pid=LS.get('okq-pid',null)||rid(12);LS.set('okq-pid',NET.pid);}
+    let conn=null,retry=0;
+    store=makeStore({},async(p,v)=>{
+      if(!conn||!conn.open)throw new Error('offline');
+      conn.send({t:'write',p,v});
+      if(v===null)delete store.data[p];else store.data[p]=v;store.notify();
+    });
+    const own=()=>{const d={};for(const k of ['answers/'+NET.pid])if(store.data[k]!==undefined)d[k]=store.data[k];return d;};
+    function connect(){
+      if(!peer||peer.destroyed){peer=new Peer(PEER_OPTS);peer.on('open',dial);peer.on('error',e=>{if(e.type==='peer-unavailable'){NET.status='nohost';NET.onchange();setTimeout(dial,3000);}else{NET.status='reconnecting';NET.onchange();setTimeout(()=>{try{peer.destroy();}catch(_){}connect();},3000);}});peer.on('disconnected',()=>{setTimeout(()=>{try{peer.reconnect();}catch(e){}},1500);});}
+      else dial();
+    }
+    function dial(){
+      if(conn&&conn.open)return;
+      NET.status=retry?'reconnecting':'connecting';NET.onchange();
+      conn=peer.connect(JOIN,{reliable:true});
+      conn.on('open',()=>{retry=0;conn.send({t:'hello',pid:NET.pid});});
+      conn.on('data',m=>{
+        if(m.t==='snap'){const keep=own();for(const k of Object.keys(store.data))delete store.data[k];Object.assign(store.data,m.d,keep);NET.status='online';NET.onchange();store.setReady();store.notify();}
+        else if(m.t==='put'){if(m.v===null)delete store.data[m.p];else store.data[m.p]=m.v;store.notify();}
+      });
+      const lost=()=>{if(NET.status==='online'){NET.status='reconnecting';NET.onchange();}retry++;setTimeout(dial,Math.min(5000,800*retry));};
+      conn.on('close',lost);conn.on('error',lost);
+    }
+    connect();
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(!conn||!conn.open))dial();});
+    NET.joinUrl=()=>{const u=new URL(location.href);u.searchParams.delete('tv');return u.toString();};
+  }
+  const user={isOwner:async()=>IS_HOST,id:async()=>NET.tv?null:NET.pid,canEdit:async()=>IS_HOST,can:async()=>null};
+  window.claude={use:async n=>n==='db'?store.db:n==='user'?user:null};
+})();
+</script>
+
+<script>
+const $=s=>document.querySelector(s);
+const app=$('#app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEYLBL=['A','B','C','D'];
+const JOIN_URL=NET.joinUrl();
+const S={db:null,user:null,uid:null,owner:false,state:null,stateLoaded:false,bank:null,players:{},answers:{},myAns:null,
+  local:{seq:null,start:0,expired:false},view:'regie',controller:false,revealing:false,editing:false,resetArm:0,delArm:null,loadErr:''};
+
+function defaultState(){return{phase:'lobby',seq:0,idx:-1,q:null,openedAt:0,reveal:null,scores:{},done:[]};}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,3500);}
+function wake(){try{navigator.wakeLock?.request('screen').catch(()=>{})}catch(e){}}
+
+/* ---------- opstarten ---------- */
+(async function init(){
+  const loadTimer=setTimeout(()=>{if(!S.stateLoaded){S.loadErr='De quiz is nog niet bereikbaar. Controleer je verbinding; de pagina blijft het proberen.';render();}},10000);
+  if(!window.claude?.use){renderNoAccess();return;}
+  const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+  if(!db){clearTimeout(loadTimer);renderNoAccess();return;}
+  S.db=db;S.user=user;
+  S.owner=user?await user.isOwner():false;
+  S.uid=user?await user.id():null;
+  const fail=()=>{S.loadErr='Verbinding met de quiz verbroken. Laad de pagina opnieuw.';render();};
+  db.doc('game/state').onSnapshot(s=>{
+    S.state=s.exists?s.data():null;
+    if(!s.metadata.fromCache){S.stateLoaded=true;clearTimeout(loadTimer);S.loadErr='';}
+    else S.stateLoaded=S.stateLoaded||!!S.state;
+    onState();
+  },fail);
+  db.collection('players').onSnapshot(q=>{const m={};q.docs.forEach(d=>m[d.id]=d.data());S.players=m;render();},fail);
+  if(S.owner){
+    db.doc('quiz/bank').onSnapshot(s=>{S.bank=s.exists?s.data():null;render();},fail);
+    db.collection('answers').onSnapshot(q=>{const m={};q.docs.forEach(d=>m[d.id]=d.data());S.answers=m;render();checkAuto();},fail);
+  }else if(S.uid){
+    db.doc('answers/'+S.uid).onSnapshot(s=>{S.myAns=s.exists?s.data():null;render();},()=>{});
+  }
+  render();
+})();
+
+function onState(){
+  const st=S.state;
+  if(st&&st.phase==='open'&&st.seq!==S.local.seq){S.local={seq:st.seq,start:performance.now(),expired:false};}
+  render();
+}
+
+/* ---------- helpers ---------- */
+const pageNo=i=>Math.max(0,i)+1;
+const pname=id=>S.players[id]?.name||'Speler';
+const playerIds=()=>Object.keys(S.players);
+function remainingPlayer(){const st=S.state;if(!st?.q)return 0;return st.q.limit-(performance.now()-S.local.start)/1000;}
+function remainingHost(){const st=S.state;if(!st?.q)return 0;return st.q.limit-(Date.now()-st.openedAt)/1000;}
+const answeredMine=()=>S.myAns&&S.state&&S.myAns.seq===S.state.seq;
+function ranking(){const sc=S.state?.scores||{};return playerIds().map(id=>({id,name:pname(id),pts:sc[id]||0})).sort((a,b)=>b.pts-a.pts||a.name.localeCompare(b.name));}
+
+function avatar(id,size,cls=''){const p=S.players[id]||{};const ini=esc((p.name||'?').trim().charAt(0).toUpperCase());
+  return `<span class="av ${cls}" style="--s:${size}px">${p.photo?`<img src="${esc(p.photo)}" alt="">`:`<b>${ini}</b>`}<i class="hat" aria-hidden="true"></i></span>`;}
+function scoreboard(withPlus){
+  const gain=S.state?.reveal?.gain||{};const list=ranking();
+  if(!list.length)return `<p class="muted">Nog niemand aangemeld.</p>`;
+  return `<div class="teams">${list.map((p,i)=>`<div class="team ${p.id===S.uid?'me':''}"><span class="rank">${i+1}</span>${avatar(p.id,38)}<span class="nm">${esc(p.name)}${p.id===S.uid?' (jij)':''}</span>${withPlus&&gain[p.id]?`<span class="plus">+${gain[p.id]}</span>`:''}<span class="pts">${p.pts}</span></div>`).join('')}</div>`;
+}
+
+function qrBlock(big){
+  let svg='';try{const q=qrcode(0,'M');q.addData(JOIN_URL);q.make();svg=q.createSvgTag({cellSize:big?8:5,margin:2,scalable:true});}catch(e){svg='';}
+  return `<div class="qr-wrap ${big?'tvqr':''}">${svg?`<div class="qr">${svg}</div>`:''}<div class="stack" style="gap:8px;min-width:0">
+    <h2>Doe mee</h2><p style="margin:0">Scan de code met de camera van je telefoon en vul je naam in.</p>
+    <p class="muted" style="margin:0;font-size:13px;word-break:break-all">${JOIN_URL}</p>
+    ${big?'':`<div class="netstat ${NET.status==='online'?'':'off'}"><i></i><span>${NET.status==='online'?`Online · ${NET.peers} verbonden`:'Verbinden met de server…'}</span></div><div><button class="btn sm ghost" data-act="copy">Link kopiëren</button></div>`}</div></div>`;
+}
+
+/* ---------- verbindingsstatus ---------- */
+NET.onchange=()=>{const el=$('#netbar');const m={connecting:'Verbinden met de spelleider…',nohost:'De spelleider is nog niet online. We blijven het proberen…',reconnecting:'Verbinding kwijt. Opnieuw verbinden…',waiting:'Quiz wordt opgestart…'};
+  if(el){el.hidden=NET.status==='online';el.textContent=m[NET.status]||'';}
+  if(S.owner&&S.view==='regie'){const n=document.querySelector('.netstat');if(n){n.classList.toggle('off',NET.status!=='online');n.querySelector('span').textContent=NET.status==='online'?`Online · ${NET.peers} verbonden`:'Verbinden met de server…';}}};
+/* ---------- render ---------- */
+function render(){
+  $('#wrap').classList.toggle('wide',S.owner||NET.tv);
+  document.body.classList.toggle('tv',S.owner&&S.view==='tv');
+  document.body.classList.toggle('playing',!!S.state&&(['open','task','reveal'].includes(S.state.phase)||(S.state.phase==='end'&&((S.owner&&S.view==='tv')||NET.tv)))&&!(S.owner&&S.view==='regie'));
+  if(S.loadErr&&!S.state){app.innerHTML=`<p class="notice">${esc(S.loadErr)}</p>`;return;}
+  if(!S.db)return;
+  if(S.owner){renderHost();return;}
+  if(NET.tv){document.body.classList.add('tv');app.innerHTML=(document.fullscreenElement?'':`<div class="row" style="justify-content:flex-end"><button class="btn sm ghost" data-act="fs">Volledig scherm</button></div>`)+(S.state?renderPublic(true):'<p class="searching">Verbinden met de spelleider…</p>');fx(S.state?.phase==='end');return;}
+  if(!S.uid){renderNoAccess();return;}
+  if(!S.stateLoaded&&!S.state){app.innerHTML=`<p class="searching">Even laden…</p>`;return;}
+  if(!S.state){app.innerHTML=`<div class="panel"><h2>Nog even geduld</h2><p>De spelleider zet de quiz klaar. Deze pagina ververst vanzelf.</p></div>`;return;}
+  const me=S.players[S.uid];
+  if(!me||S.editing){renderJoin(me);return;}
+  if(!me.photo||S.retake){renderSelfie(me);return;}
+  app.innerHTML=renderPublic(false);
+  fx(S.state.phase==='end');
+}
+
+const pick=(arr,n)=>arr[Math.abs(n|0)%arr.length];
+const fill=(t,o)=>t.replace(/\{(\w+)\}/g,(m,k)=>o[k]??'');
+const LINES={
+  all:["Iedereen goed! Te makkelijk, of zijn jullie gewoon een stel slimmeriken?","Allemaal raak. De spelleider gaat de vragen moeilijker maken, let maar op.","Iedereen goed. Dit voelt als een groepsopdracht waar iedereen meewerkte."],
+  none:["Niemand had het goed. Was dit een strikvraag? Nee hoor.","Nul goede antwoorden. De 00s zijn duidelijk langer geleden dan jullie dachten.","Helemaal niemand? Zelfs de testspelers schamen zich."],
+  lead:["Wisseling aan kop! {name} grijpt de macht.","{name} staat ineens bovenaan. Iedereen: pak 'm!","Nieuwe koploper: {name}. Zet het maar op je Hyves."],
+  hot:["{name} heeft er {n} op rij goed. Iemand heeft vroeger te veel Wikipedia gelezen.","{n} keer raak voor {name}. Zelfs Google is onder de indruk.","{name}: {n} op rij. Dit is geen geluk meer, dit is talent."],
+  cold:["{name} zit op {n} keer mis op rij. Tijd om de Nokia te herstarten.","{n} keer fout voor {name}. Was je in de 00s soms in slaap gevallen?","{name} heeft er {n} op rij naast. Zelfs de millenniumbug deed het beter."],
+  fast:["{name} drukte sneller dan je 'MSN-por' kon zeggen.","{name} was er sneller bij dan een sms op een Nokia 3310.","{name} had het antwoord al voordat de vraag uit was. Verdacht snel."],
+  meHot:["{n} op rij goed. Rustig aan, laat de anderen ook eens wat.","{n} keer raak! Je bent officieel de Federer van deze quiz.","{n} op rij. Wie heeft jou ingehuurd?"],
+  meCold:["{n} keer mis op rij. Gelukkig telt gezelligheid ook.","{n} op rij fout. Je oliebol gelooft nog in je.","Oei, {n} keer naast. Misschien die champagne even wegzetten?"],
+  meGood:["Goed zo! Snel én slim.","Raak! Je jongere ik zou trots zijn.","Netjes. Respect, zoals ze op Hyves zeiden."],
+  meBad:["Bijna. Of nou ja, niet echt.","Fout, maar wel met overtuiging gekozen.","Nope. Volgende vraag gaat vast beter."],
+  meNone:["Geen antwoord? Was je even een oliebol aan het halen?","Te laat! Je tikte als een inbelmodem.","Zzz. Niet in slaap vallen voor 12 uur!"]
+};
+function commentary(st){
+  const rv=st.reveal||{};const ans=rv.answers||{};const ids=playerIds();const seq=st.seq||0;
+  if(!ids.length||st.q?.test)return '';
+  const good=ids.filter(id=>ans[id]&&ans[id].c===rv.correct);
+  if(rv.leaderChange&&S.players[rv.leaderChange])return fill(pick(LINES.lead,seq),{name:pname(rv.leaderChange)});
+  if(good.length===ids.length&&ids.length>1)return pick(LINES.all,seq);
+  if(!good.length)return pick(LINES.none,seq);
+  const sk=st.streak||{};
+  const hot=ids.filter(id=>(sk[id]||0)>=3).sort((a,b)=>sk[b]-sk[a])[0];
+  const cold=ids.filter(id=>(sk[id]||0)<=-3).sort((a,b)=>sk[a]-sk[b])[0];
+  if(hot&&(seq%2||!cold))return fill(pick(LINES.hot,seq),{name:pname(hot),n:sk[hot]});
+  if(cold)return fill(pick(LINES.cold,seq),{name:pname(cold),n:-sk[cold]});
+  const f=good.sort((a,b)=>ans[a].ms-ans[b].ms)[0];
+  return fill(pick(LINES.fast,seq),{name:pname(f)});
+}
+function personal(st){
+  const rv=st.reveal||{};const my=rv.answers?.[S.uid];const n=st.streak?.[S.uid]||0;const seq=st.seq||0;
+  if(n>=3)return fill(pick(LINES.meHot,seq),{n});
+  if(n<=-3)return fill(pick(LINES.meCold,seq),{n:-n});
+  if(!my)return pick(LINES.meNone,seq);
+  return pick(my.c===rv.correct?LINES.meGood:LINES.meBad,seq);
+}
+function revealFaces(rv){
+  const ans=rv.answers||{};const gain=rv.gain||{};
+  const good=Object.keys(ans).filter(id=>ans[id].c===rv.correct&&S.players[id]).sort((a,b)=>ans[a].ms-ans[b].ms);
+  const bad=Object.keys(ans).filter(id=>ans[id].c!==rv.correct&&S.players[id]);
+  const none=playerIds().filter(id=>!ans[id]);
+  let h='';
+  if(good.length){const f=good[0];h+=`<div class="fastest">${avatar(f,110,'party wobble')}<div class="stack" style="gap:2px;min-width:0"><span class="label">Snelste vinger</span><span class="mine">${esc(pname(f))}</span><span class="muted">${(ans[f].ms/1000).toFixed(1)} sec${gain[f]?` · +${gain[f]}`:''}</span></div></div>`;}
+  if(bad.length||none.length)h+=`<div class="oops-row"><span class="label">${bad.length?'Oeps, fout':'Te laat'}</span><div class="row">${bad.map(id=>`<span class="crowd-i">${avatar(id,52,'oops')}<small>${esc(pname(id))}</small></span>`).join('')}${none.map(id=>`<span class="crowd-i">${avatar(id,52,'sleep')}<small>${esc(pname(id))} · zzz</small></span>`).join('')}</div></div>`;
+  return h;
+}
+function renderNoAccess(){
+  app.innerHTML=`<div class="panel"><h2>Deze link werkt niet</h2><p>Scan de QR-code bij de spelleider opnieuw.</p></div>`;
+}
+
+const FILTERS=[['goud','Goud','sepia(.5) saturate(1.5) contrast(1.08) brightness(1.06)'],['pop','00s-pop','saturate(1.9) contrast(1.18) hue-rotate(-12deg)'],['glam','Glamour','grayscale(1) contrast(1.25) brightness(1.05)'],['orig','Origineel','none']];
+const PROPS=[['bril','2027-bril'],['snor','Snor'],['kroon','Kroon'],['hoed','Feesthoed'],['confetti','Confetti']];
+S.fx={f:'goud',props:['bril','confetti']};
+function renderSelfie(me){
+  const prev=S.shot||me.photo;
+  app.innerHTML=`<div class="panel selfie">
+    <span class="label">Stap 2 van 2</span><h2>Tijd voor je feestportret, ${esc(me.name)}</h2>
+    <p style="margin:0">Je portret komt de hele avond in beeld. Trek een gekke bek en kies je extra's.</p>
+    <div class="shot">${prev?`<img src="${esc(prev)}" alt="Jouw feestportret">`:`<span>Nog geen foto</span>`}</div>
+    <input type="file" id="cam" accept="image/*" capture="user" hidden>
+    ${S.raw?`<div class="fxpick"><span class="label">Filter</span><div class="chips">${FILTERS.map(([k,l])=>`<button class="chip ${S.fx.f===k?'on':''}" data-act="fxf" data-k="${k}">${l}</button>`).join('')}</div>
+      <span class="label">Extra's</span><div class="chips">${PROPS.map(([k,l])=>`<button class="chip ${S.fx.props.includes(k)?'on':''}" data-act="fxp" data-k="${k}">${l}</button>`).join('')}</div></div>`:''}
+    <div class="row" style="justify-content:center">
+      <label class="btn ${prev?'ghost':''}" for="cam">${prev?'Nieuwe foto':'Maak je selfie'}</label>
+      ${S.shot?`<button class="btn" data-act="usephoto">Deze is goed</button>`:''}
+      ${me.photo&&!S.shot?`<button class="btn ghost" data-act="canceledit">Annuleren</button>`:''}
+    </div></div>`;
+}
+async function loadRaw(file){
+  const url=URL.createObjectURL(file);
+  try{const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url;});
+    const n=360,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
+    const m=Math.min(img.naturalWidth,img.naturalHeight);
+    x.translate(n,0);x.scale(-1,1);
+    x.drawImage(img,(img.naturalWidth-m)/2,(img.naturalHeight-m)/2,m,m,0,0,n,n);
+    return c;}
+  finally{URL.revokeObjectURL(url);}
+}
+function seeded(n){let s=n;return()=>((s=Math.imul(s^s>>>15,2246822507)^Math.imul(s^s>>>13,3266489909))>>>0)/4294967296;}
+async function compose(){
+  const raw=S.raw;if(!raw)return null;
+  try{await document.fonts.load('700 30px Cinzel');}catch(e){}
+  const n=360,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
+  const f=FILTERS.find(z=>z[0]===S.fx.f)||FILTERS[0];
+  x.filter=f[2];x.drawImage(raw,0,0);x.filter='none';
+  const v=x.createRadialGradient(n/2,n/2,n*.3,n/2,n/2,n*.72);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(40,22,0,.55)');x.fillStyle=v;x.fillRect(0,0,n,n);
+  const gold=x.createLinearGradient(0,0,0,n);gold.addColorStop(0,'#fff2c6');gold.addColorStop(.4,'#f0c768');gold.addColorStop(.62,'#b9832a');gold.addColorStop(1,'#f3d488');
+  const P=S.fx.props;
+  if(P.includes('confetti')){const r=seeded(7);const cols=['#ff3a3a','#35e266','#ffe41f','#36e6ff','#ff4ef0','#fff2c6'];
+    for(let i=0;i<70;i++){const a=r()*Math.PI*2,d=n*(.36+r()*.14);const px=n/2+Math.cos(a)*d,py=n/2+Math.sin(a)*d;
+      x.save();x.translate(px,py);x.rotate(r()*6);x.fillStyle=cols[i%cols.length];if(i%3)x.fillRect(-5,-2.5,10,5);else{x.beginPath();x.arc(0,0,3.5,0,7);x.fill();}x.restore();}}
+  if(P.includes('bril')){
+    const y=n*.43,rr=n*.12,lx=n*.34,rx=n*.66;
+    x.lineWidth=8;x.strokeStyle=gold;x.fillStyle='rgba(20,12,0,.55)';
+    for(const cx of [lx,rx]){x.beginPath();x.arc(cx,y,rr,0,7);x.fill();x.stroke();}
+    x.beginPath();x.moveTo(lx+rr,y-6);x.quadraticCurveTo(n/2,y-22,rx-rr,y-6);x.stroke();
+    x.beginPath();x.moveTo(lx-rr,y-4);x.lineTo(lx-rr-30,y-14);x.moveTo(rx+rr,y-4);x.lineTo(rx+rr+30,y-14);x.stroke();
+    x.fillStyle=gold;x.font='700 50px Cinzel, Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText('20',lx,y+3);x.fillText('27',rx,y+3);
+    x.fillStyle='rgba(255,255,255,.55)';for(const cx of [lx,rx]){x.beginPath();x.ellipse(cx-rr*.45,y-rr*.45,8,4,-.6,0,7);x.fill();}}
+  if(P.includes('snor')){
+    x.save();x.translate(n/2,n*.64);x.fillStyle='#1b120a';x.strokeStyle='#000';x.lineWidth=2;
+    x.beginPath();x.moveTo(0,-6);x.bezierCurveTo(22,-26,58,-14,70,-2);x.bezierCurveTo(78,8,90,2,94,-10);x.bezierCurveTo(96,14,62,26,40,10);x.bezierCurveTo(22,0,8,10,0,6);
+    x.bezierCurveTo(-8,10,-22,0,-40,10);x.bezierCurveTo(-62,26,-96,14,-94,-10);x.bezierCurveTo(-90,2,-78,8,-70,-2);x.bezierCurveTo(-58,-14,-22,-26,0,-6);x.fill();x.restore();}
+  if(P.includes('kroon')){
+    x.save();x.translate(n/2,n*.17);x.rotate(-.12);x.fillStyle=gold;x.strokeStyle='#7a4a10';x.lineWidth=3;
+    x.beginPath();x.moveTo(-70,30);x.lineTo(-78,-28);x.lineTo(-38,4);x.lineTo(0,-40);x.lineTo(38,4);x.lineTo(78,-28);x.lineTo(70,30);x.closePath();x.fill();x.stroke();
+    for(const [cx,cy,col] of [[-78,-28,'#ff3a3a'],[0,-40,'#36e6ff'],[78,-28,'#35e266']]){x.fillStyle=col;x.beginPath();x.arc(cx,cy,8,0,7);x.fill();}
+    x.fillStyle='#ff4ef0';x.beginPath();x.arc(0,14,9,0,7);x.fill();x.restore();}
+  if(P.includes('hoed')){
+    x.save();x.translate(n*.72,n*.2);x.rotate(.38);
+    const hg=x.createLinearGradient(-50,0,50,0);hg.addColorStop(0,'#ff4ef0');hg.addColorStop(.5,'#ffe41f');hg.addColorStop(1,'#36e6ff');
+    x.fillStyle=hg;x.beginPath();x.moveTo(0,-80);x.lineTo(46,30);x.lineTo(-46,30);x.closePath();x.fill();
+    x.strokeStyle='rgba(255,255,255,.7)';x.lineWidth=5;for(const t of [-.35,.05,.45]){x.beginPath();x.moveTo(-46+92*(.5+t*.6)-20,30-110*(.5-t*.5));x.lineTo(-46+92*(.5+t*.6)+20,30-110*(.5-t*.5)+12);x.stroke();}
+    x.fillStyle='#fff2c6';x.beginPath();x.arc(0,-82,13,0,7);x.fill();x.restore();}
+  /* gouden naamlint */
+  const name=(S.players[S.uid]?.name||'').toUpperCase().slice(0,14);
+  if(name){x.save();x.translate(n/2,n*.86);
+    x.fillStyle='#7a4a10';x.beginPath();x.moveTo(-128,-16);x.lineTo(-148,0);x.lineTo(-128,16);x.lineTo(-110,10);x.closePath();x.fill();x.beginPath();x.moveTo(128,-16);x.lineTo(148,0);x.lineTo(128,16);x.lineTo(110,10);x.closePath();x.fill();
+    x.fillStyle=gold;x.beginPath();x.moveTo(-118,-22);x.quadraticCurveTo(0,-34,118,-22);x.lineTo(118,16);x.quadraticCurveTo(0,4,-118,16);x.closePath();x.fill();
+    x.fillStyle='#1a1206';x.font='700 '+(name.length>9?22:28)+'px Cinzel, Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText(name,0,-6);x.restore();}
+  return c.toDataURL('image/jpeg',.78);
+}
+async function recompose(){try{S.shot=await compose();}catch(e){S.shot=null;}render();}
+document.addEventListener('change',async e=>{
+  if(e.target.id!=='cam'||!e.target.files?.[0])return;
+  try{S.raw=await loadRaw(e.target.files[0]);await recompose();}catch(err){toast('Deze foto lukt niet. Probeer het nog een keer.');}
+});
+function renderJoin(me){
+  app.innerHTML=`<form class="panel" id="joinform">
+    <h2>${me?'Naam wijzigen':'Welkom bij de quiz'}</h2>
+    <label class="label" for="nm">Wat is je naam?</label>
+    <input type="text" id="nm" maxlength="20" autocomplete="given-name" value="${esc(me?.name||'')}" placeholder="bijv. Sanne" required>
+    <button class="btn" type="submit">Doe mee</button>
+    ${me?`<button class="btn ghost sm" type="button" data-act="canceledit">Annuleren</button>`:''}
+  </form>`;
+  if(!me)setTimeout(()=>$('#nm')?.focus(),50);
+}
+
+function renderPublic(tv){
+  const st=S.state;const q=st.q;let h='';
+  if(st.phase==='lobby'){
+    const me=S.players[S.uid];
+    h=`${tv?`<div class="tv-lobby">${qrBlock(true)}<div class="stack"><h3>${playerIds().length?`Er doen ${playerIds().length} spelers mee`:'Nog niemand binnen'}</h3><div class="crowd">${playerIds().map((id,i)=>`<span class="crowd-i" style="--d:${(i%5)*.3}s">${avatar(id,84,'party')}<small>${esc(pname(id))}</small></span>`).join('')}</div></div></div>`:`<div class="panel"><span class="label">Je speelt mee als</span><div class="row" style="padding-top:26px">${avatar(S.uid,72,'party')}<p class="mine">${esc(me?.name)}</p></div>
+      <p style="margin:0">Hoe sneller je het goede antwoord kiest, hoe meer punten. Elke ronde is meer waard, en de finale telt ×5. Achterstand is dus nooit verloren!</p>
+      <div class="row"><button class="btn ghost sm" data-act="edit">Naam wijzigen</button><button class="btn ghost sm" data-act="retake">Nieuwe selfie</button></div></div>`}
+      ${tv?'':`<h3>Wie doen er mee</h3>${scoreboard(false)}`}`;
+  }else if(st.phase==='open'){
+    const mine=tv?null:(answeredMine()?S.myAns.c:null);
+    const rem=tv?remainingHost():remainingPlayer();
+    const closed=!tv&&(mine!==null||rem<=0);
+    h=`<div class="stack"><div class="row" style="gap:10px"><span class="round">${esc(q.round)}</span>${multBadge(q.mult)}</div>
+      <p class="q-text">${esc(q.text)}</p>
+      <div class="timer-row"><span>${q.type==='music'?'Luister goed':'Tijd'}</span><b data-timer="${tv?'host':'player'}">${Math.max(0,Math.ceil(rem))}</b></div>
+      <div class="timer"><i data-bar="${tv?'host':'player'}" style="width:${Math.max(0,rem/q.limit*100)}%"></i></div>
+      <div class="opts">${q.options.map((o,i)=>`<button class="opt ${mine!==null&&mine!==i?'dimmed':''} ${mine===i?'picked':''}" data-act="ans" data-i="${i}" ${tv||closed?'disabled':''}><span class="k">${KEYLBL[i]}</span>${esc(o)}</button>`).join('')}</div>
+      ${!tv&&mine!==null?`<p class="notice">Antwoord binnen in ${(S.myAns.ms/1000).toFixed(1)} seconden. Wachten op de rest…</p>`:''}
+      ${!tv&&mine===null&&rem<=0?`<p class="notice">De tijd is om.</p>`:''}
+    </div>`;
+  }else if(st.phase==='task'){
+    const g=st.reveal?.gain||{};
+    h=`<div class="stack"><div class="row" style="gap:10px"><span class="round">${esc(q.round)}</span>${multBadge(q.mult)}</div><p class="q-text">${esc(q.text)}</p>
+      <p class="notice">De spelleider deelt de punten uit.</p>
+      ${Object.keys(g).length?`<h3>Punten bij deze opdracht</h3>${scoreboard(true)}`:''}</div>`;
+  }else if(st.phase==='reveal'){
+    const rv=st.reveal||{};const my=tv?null:rv.answers?.[S.uid];const myGain=tv?0:(rv.gain?.[S.uid]||0);
+    h=`<div class="stack"><span class="round">${esc(q?.round)}</span><p class="q-text">${esc(q?.text)}</p>
+      ${q&&!q.task?`<div class="opts">${q.options.map((o,i)=>`<button class="opt ${i===rv.correct?'right':'dimmed'}" disabled><span class="k">${KEYLBL[i]}</span>${esc(o)}</button>`).join('')}</div>`:''}
+      ${!tv&&q?.test?`<p class="mine">${my&&my.c===rv.correct?'Goed! Je snapt hoe het werkt.':(my?'Fout, maar dit was oefenen.':'Geen antwoord gegeven.')} <span class="muted" style="font-size:18px">Oefenvraag, telt niet mee.</span></p>`:''}
+      ${!tv&&q&&!q.task&&!q.test?`<p class="mine">${myGain>0?`Goed! <span class="gain">+${myGain}</span>`:(my?'Helaas, fout':'Geen antwoord gegeven')}</p>`:''}
+      ${!tv&&q?.task&&myGain?`<p class="mine">Jij kreeg <span class="gain">+${myGain}</span></p>`:''}
+      ${!tv&&q&&!q.task&&!q.test?`<p class="quip">${esc(personal(st))}</p>`:''}
+      <div class="faces">${q&&!q.task&&commentary(st)?`<div class="commentator"><span class="label">De commentator</span><p>${esc(commentary(st))}</p></div>`:''}
+      ${q&&!q.task?revealFaces(rv):''}</div>
+      ${tv?'':`<h3>Stand</h3>${scoreboard(true)}`}</div>`;
+  }else if(st.phase==='end'){
+    const list=ranking();const w=list[0];
+    h=`<div class="stack"><div class="endhero"><span class="round">Eindstand</span>${w?`<div class="winner">${avatar(w.id,180,'party wobble crown')}</div>`:''}<p class="big" style="margin:0">${esc(w?.name||'')}</p>
+      <p class="q-text">wint de Oudejaarsquiz met ${w?.pts||0} punten.</p></div>${scoreboard(false)}
+      <p class="muted">Gelukkig nieuwjaar en een knallend 2027.</p></div>`;
+  }
+  return h;
+}
+
+/* ---------- spelleider ---------- */
+function renderHost(){
+  const st=S.state;
+  const tabs=`<div class="tabs"><button class="btn ${S.view==='regie'?'':'ghost'}" data-act="view" data-v="regie">Regie</button><button class="btn ${S.view==='tv'?'':'ghost'}" data-act="view" data-v="tv">TV-scherm</button><button class="btn ghost" data-act="tvwin" title="Opent het tv-scherm in een eigen venster voor je tweede scherm">TV-venster openen</button></div>`;
+  if(!S.stateLoaded&&!st){app.innerHTML=`<p class="searching">Even laden…</p>`;return;}
+  if(!st){app.innerHTML=`<div class="panel"><h2>Spel klaarzetten</h2><p>Er staat nog geen spel klaar.</p><div><button class="btn" data-act="setup">Zet spel klaar</button></div></div>`;return;}
+  if(S.view==='tv'){app.innerHTML=tabs+renderPublic(true);fx(st.phase==='end');return;}
+  fx(false);
+  const bank=S.bank?.items||[];const it=bank[st.idx];const ids=playerIds();
+  let now='';
+  if(st.phase==='lobby')now=`<p style="margin:0">Het wachtscherm met de QR-code staat aan. Start de eerste vraag zodra iedereen erin zit.</p><div class="row"><button class="btn" data-act="release" data-i="${nextIdx()}" ${bank.length?'':'disabled'}>Start vraag ${pageNo(nextIdx())}</button></div>`;
+  else if(st.phase==='open'&&it){
+    const n=ids.filter(id=>S.answers[id]?.seq===st.seq).length;
+    now=`${itemHead(it)}
+      ${it.host?`<p class="notice">${esc(it.host)}</p>`:''}
+      ${it.song&&S.bank.items[st.idx-1]?.type!=='music'?`<p class="notice" style="font-size:14px">Muziekronde: zet de Quiz-playlist aan bij nummer 1. Na elke vraag start de volgende vanzelf; jij tikt alleen op 'volgend nummer' op je vergrendelscherm.</p>`:''}
+      ${it.song?`<div class="row">${spotify(it)}<a class="btn spot" href="https://open.spotify.com/playlist/2gNIM9KsqBtqbeJHdB1jOD" target="_blank" rel="noopener">Quiz-playlist</a><span class="muted" style="font-size:13px">Tip: zet het nummer klaar vóór je de vraag start.</span></div>`:''}
+      <p class="ans">Goed: ${KEYLBL[it.correct]} · ${esc(it.options[it.correct])}</p>
+      <div class="timer-row"><span>Nog</span><b data-timer="host">${Math.max(0,Math.ceil(remainingHost()))}</b></div>
+      <div class="timer"><i data-bar="host" style="width:${Math.max(0,remainingHost()/st.q.limit*100)}%"></i></div>
+      <div class="counts"><span>${n} van ${ids.length} hebben geantwoord</span></div>
+      <div class="row"><button class="btn" data-act="reveal">Stop en toon antwoord</button></div>
+      <p class="muted" style="font-size:12px;margin:0">Het antwoord verschijnt vanzelf zodra iedereen heeft gekozen of de tijd om is.</p>`;
+  }else if(st.phase==='task'&&it){
+    const g=st.reveal?.gain||{};
+    now=`${itemHead(it)}${it.host?`<p class="notice">${esc(it.host)}</p>`:''}
+      <span class="label">Punten geven</span>
+      ${ids.length?ids.map(id=>`<div class="row"><span class="team" style="flex:1;min-width:150px"><span class="nm">${esc(pname(id))}</span><span class="plus">+${g[id]||0}</span></span>
+        <button class="btn sm" data-act="award" data-u="${id}" data-p="${Math.round(250*(st.q?.mult||1))}">+${Math.round(250*(st.q?.mult||1))}</button><button class="btn sm" data-act="award" data-u="${id}" data-p="${Math.round(500*(st.q?.mult||1))}">+${Math.round(500*(st.q?.mult||1))}</button><button class="btn sm" data-act="award" data-u="${id}" data-p="${Math.round(1000*(st.q?.mult||1))}">+${Math.round(1000*(st.q?.mult||1))}</button><button class="btn sm ghost" data-act="award" data-u="${id}" data-p="${-Math.round(250*(st.q?.mult||1))}">−${Math.round(250*(st.q?.mult||1))}</button></div>`).join(''):'<p class="muted">Nog geen spelers.</p>'}
+      <div class="row"><button class="btn" data-act="taskdone">Opdracht afronden</button></div>`;
+  }else if(st.phase==='reveal'){
+    const ni=nextIdx();
+    const an=S.autoNext;
+    now=`${it?itemHead(it):''}<p style="margin:0">Het antwoord en de stand staan op alle telefoons.</p>${commentary(st)?`<div class="commentator"><span class="label">De commentator</span><p>${esc(commentary(st))}</p></div>`:''}
+      ${an?`<div class="autonext"><p style="margin:0"><b>Skip nu naar het volgende nummer.</b> De volgende muziekvraag start over <b data-auto>${Math.max(0,Math.ceil((an.at-Date.now())/1000))}</b> seconden.</p><div class="row"><button class="btn sm" data-act="release" data-i="${an.idx}">Nu starten</button><button class="btn sm ghost" data-act="pauseauto">Pauzeer</button></div></div>`:''}
+      <div class="row">${ni<bank.length?`<button class="btn" data-act="release" data-i="${ni}">Volgende: vraag ${pageNo(ni)}</button>`:''}<button class="btn ghost" data-act="lobby">Wachtscherm</button><button class="btn ghost" data-act="end">Eindstand tonen</button></div>`;
+  }else if(st.phase==='end'){
+    now=`<p style="margin:0">De eindstand staat op alle telefoons.</p><div class="row"><button class="btn ghost" data-act="lobby">Terug naar wachtscherm</button></div>`;
+  }
+  let rounds='',last='';
+  bank.forEach((q,i)=>{if(q.round!==last){rounds+=`<div class="rh">${esc(q.round)}</div>`;last=q.round;}
+    const done=(st.done||[]).includes(i);
+    rounds+=`<div class="qi ${i===st.idx&&st.phase!=='lobby'?'cur':''} ${done?'done':''}"><span class="p">${pageNo(i)}</span><span class="t"><span class="ty">${q.test?'oefen':q.type==='mc'?'vraag':q.type==='music'?'muziek':'opdracht'}${q.mult>1?' · '+multTxt(q.mult):''}${done?' · gespeeld':''}</span><br>${esc(q.text)}</span><span class="row" style="gap:6px;justify-content:flex-end">${spotify(q,true)}<button class="btn sm ${done?'ghost':''}" data-act="release" data-i="${i}">Start</button></span></div>`;});
+  const sc=st.scores||{};
+  app.innerHTML=`${tabs}<div class="grid2">
+    <div class="stack">
+      <div class="panel"><span class="label">Nu op de telefoons · ${phaseName(st.phase)}</span>${now}</div>
+      <div class="panel">${qrBlock(false)}</div>
+      <div class="panel"><span class="label">Spelers · ${ids.length} aangemeld</span>
+        ${ids.length?`<div class="teams">${ranking().map(p=>`<div class="team">${avatar(p.id,34)}<span class="nm">${esc(p.name)}</span><span class="pts">${p.pts}</span><button class="btn sm ${S.delArm===p.id?'r':'ghost'}" data-act="del" data-u="${p.id}">${S.delArm===p.id?'Zeker?':'Verwijder'}</button></div>`).join('')}</div>`:'<p class="muted" style="margin:0">Nog niemand. Laat de QR-code scannen.</p>'}
+      </div>
+      <div class="panel"><span class="label">Alleen testen</span>
+        <p style="margin:0;font-size:14px">Testspelers geven vanzelf antwoord, meestal goed, zodat je de hele quiz alleen kunt doorlopen. Kijk op het tabblad TV-scherm wat de spelers zien.</p>
+        <div class="row">${hasBots()?`<button class="btn sm ghost" data-act="botsoff">Testspelers verwijderen</button>`:`<button class="btn sm" data-act="botson">Voeg 3 testspelers toe</button>`}</div></div>
+      <div class="panel"><span class="label">Spel</span><div class="row"><button class="btn ghost sm" data-act="lobby">Wachtscherm</button><button class="btn ghost sm" data-act="end">Eindstand</button><button class="btn sm ${S.newArm>Date.now()?'r':'ghost'}" data-act="newgame">${S.newArm>Date.now()?'Klik nogmaals: alles wissen':'Nieuw spel'}</button><button class="btn sm ${S.resetArm>Date.now()?'r':'ghost'}" data-act="reset">${S.resetArm>Date.now()?'Klik nogmaals: alles op 0':'Scores resetten'}</button></div></div>
+    </div>
+    <div class="panel"><span class="label">Vragenlijst · ${bank.length} onderdelen</span>${bank.length?`<div class="qlist">${rounds}</div>`:'<p class="muted">De vragen worden geladen…</p>'}</div>
+  </div>`;
+}
+function spotify(it,sm){return it.song?`<a class="btn ${sm?'sm':''} spot" href="https://open.spotify.com/search/${encodeURIComponent(it.song)}" target="_blank" rel="noopener">Open in Spotify</a>`:'';}
+const multTxt=m=>'×'+String(m||1).replace('.',',');
+function multBadge(m){return (m||1)>1?`<span class="mult">${multTxt(m)} punten</span>`:'';}
+function itemHead(it){return `<span class="round">${esc(it.round)}</span>${multBadge(it.mult)}<p class="q-text" style="font-size:30px">${esc(it.text)}</p>`;}
+function phaseName(p){return({lobby:'wachtscherm',open:'vraag loopt',task:'opdracht',reveal:'antwoord getoond',end:'eindstand'})[p]||p;}
+function nextIdx(){const st=S.state;const bank=S.bank?.items||[];const done=st?.done||[];
+  for(let i=Math.max(0,st?.idx??0);i<bank.length;i++)if(!done.includes(i))return i;
+  for(let i=0;i<bank.length;i++)if(!done.includes(i))return i;return bank.length;}
+
+async function save(next){
+  S.state=next;render();
+  try{await S.db.doc('game/state').set(next);}catch(e){toast('Opslaan mislukt. Probeer het opnieuw.');}
+}
+const BOTS=[['test-anna','Test Anna'],['test-bram','Test Bram'],['test-kim','Test Kim']];
+const hasBots=()=>BOTS.some(([id])=>S.players[id]);
+async function addBots(){try{for(const [id,name] of BOTS)await S.db.doc('players/'+id).set({name,test:true});toast('3 testspelers toegevoegd.');}catch(e){toast('Testspelers toevoegen mislukt.');}}
+async function removeBots(){try{for(const [id] of BOTS){await S.db.doc('players/'+id).delete();await S.db.doc('answers/'+id).delete();}
+  const sc={...(S.state.scores||{})};BOTS.forEach(([id])=>delete sc[id]);await save({...S.state,scores:sc});toast('Testspelers verwijderd.');}catch(e){toast('Verwijderen mislukt.');}}
+function runBots(seq,it){
+  if(!it||it.type==='task')return;const lim=(it.limit||20)*1000;
+  BOTS.forEach(([id])=>{if(!S.players[id])return;
+    const ms=Math.round(1500+Math.random()*lim*.6);
+    const c=Math.random()<.65?it.correct:Math.floor(Math.random()*it.options.length);
+    setTimeout(()=>{if(S.state?.seq===seq&&S.state.phase==='open')S.db.doc('answers/'+id).set({seq,c,ms}).catch(()=>{});},ms);});
+}
+async function release(i){
+  S.autoNext=null;
+  const it=S.bank?.items?.[i];if(!it)return;const st=S.state;
+  const q={type:it.type,round:it.round,text:it.text,options:it.options||[],limit:it.limit||20,mult:it.mult||1,task:it.type==='task',test:!!it.test};
+  S.controller=true;
+  await save({...st,phase:it.type==='task'?'task':'open',idx:i,seq:(st.seq||0)+1,q,openedAt:Date.now(),reveal:it.type==='task'?{gain:{}}:null});
+  runBots(S.state.seq,it);
+}
+async function reveal(){
+  const st=S.state;if(S.revealing||st?.phase!=='open')return;const it=S.bank?.items?.[st.idx];if(!it)return;
+  S.revealing=true;
+  const answers={},gain={},scores={...(st.scores||{})};
+  for(const id of playerIds()){const a=S.answers[id];
+    if(a&&a.seq===st.seq){answers[id]={c:a.c,ms:a.ms};
+      if(a.c===it.correct&&!it.test){const p=Math.round((500+500*Math.max(0,1-a.ms/(st.q.limit*1000)))*(st.q.mult||1));gain[id]=p;scores[id]=(scores[id]||0)+p;}}}
+  const streak={...(st.streak||{})};let leaderChange=null;
+  if(!it.test){for(const id of playerIds()){const ok=answers[id]&&answers[id].c===it.correct;const v=streak[id]||0;streak[id]=ok?Math.max(0,v)+1:Math.min(0,v)-1;}
+    const top=Object.entries(scores).filter(([id])=>S.players[id]).sort((a,b)=>b[1]-a[1])[0];
+    if(top&&top[1]>0&&st.leader&&top[0]!==st.leader)leaderChange=top[0];
+    var leader=top&&top[1]>0?top[0]:(st.leader||null);}
+  await save({...st,phase:'reveal',reveal:{correct:it.correct,answers,gain,leaderChange},scores,streak,leader:leader??st.leader??null,done:[...new Set([...(st.done||[]),st.idx])]});
+  S.revealing=false;
+  const nx=S.bank.items[st.idx+1];
+  if(it.type==='music'&&nx&&nx.type==='music'){S.autoNext={at:Date.now()+8000,idx:st.idx+1};render();}
+}
+function checkAuto(){
+  const st=S.state;if(!S.owner||!S.controller||st?.phase!=='open')return;
+  const ids=playerIds();const allIn=ids.length>0&&ids.every(id=>S.answers[id]?.seq===st.seq);
+  if(allIn||remainingHost()<-1.5)reveal();
+}
+async function award(uid,p){
+  const st=S.state;if(st.phase!=='task')return;
+  const gain={...(st.reveal?.gain||{})};gain[uid]=(gain[uid]||0)+p;
+  const scores={...(st.scores||{})};scores[uid]=(scores[uid]||0)+p;
+  await save({...st,reveal:{gain},scores});
+}
+
+/* ---------- events ---------- */
+document.addEventListener('submit',async e=>{
+  if(e.target.id!=='joinform')return;e.preventDefault();
+  const name=($('#nm')?.value||'').trim();if(!name){toast('Vul je naam in.');return;}
+  wake();
+  try{const cur=S.players[S.uid]||{};await S.db.doc('players/'+S.uid).set({...cur,name});S.editing=false;render();}
+  catch(err){toast('Geen verbinding met de spelleider. Probeer het zo nog een keer.');}
+});
+document.addEventListener('click',async e=>{
+  if(S.owner)wake();
+  const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;const st=S.state;
+  if(a==='ans'){wake();const i=+b.dataset.i;const ms=Math.round(performance.now()-S.local.start);
+    if(!st||st.phase!=='open'||answeredMine()||ms>st.q.limit*1000)return;
+    S.myAns={seq:st.seq,c:i,ms};render();
+    try{await S.db.doc('answers/'+S.uid).set({seq:st.seq,c:i,ms});}catch(err){S.myAns=null;toast('Antwoord niet verstuurd. Tik nog een keer.');render();}
+  }
+  else if(a==='pauseauto'){S.autoNext=null;render();}
+  else if(a==='newgame'){if(S.newArm>Date.now()){NET.newGame();}else{S.newArm=Date.now()+4000;render();setTimeout(render,4100);}}
+  else if(a==='tvwin'){const w=window.open(NET.tvUrl(),'okq-tv','popup=yes,width=1280,height=720');if(!w)toast('Je browser blokkeert het venster. Sta pop-ups toe voor deze site.');}
+  else if(a==='fs'){try{await document.documentElement.requestFullscreen();}catch(err){toast('Druk op F11 voor volledig scherm.');}render();}
+  else if(a==='botson'){await addBots();}
+  else if(a==='botsoff'){await removeBots();}
+  else if(a==='edit'){S.editing=true;render();}
+  else if(a==='retake'){S.retake=true;S.shot=null;S.raw=null;render();}
+  else if(a==='canceledit'){S.editing=false;S.retake=false;S.shot=null;render();}
+  else if(a==='fxf'){S.fx.f=b.dataset.k;await recompose();}
+  else if(a==='fxp'){const k=b.dataset.k;S.fx.props=S.fx.props.includes(k)?S.fx.props.filter(z=>z!==k):[...S.fx.props,k];await recompose();}
+  else if(a==='usephoto'){const photo=S.shot;if(!photo)return;
+    try{await S.db.doc('players/'+S.uid).set({...(S.players[S.uid]||{}),photo});S.shot=null;S.raw=null;S.retake=false;render();toast('Lekker ding. Je doet mee!');}
+    catch(err){toast('Foto opslaan mislukt. Probeer het opnieuw.');}}
+  else if(a==='copy'){try{await navigator.clipboard.writeText(JOIN_URL);toast('Link gekopieerd.');}catch(err){toast('Kopiëren lukt hier niet. Selecteer de link onder de code.');}}
+  else if(a==='view'){S.view=b.dataset.v;render();}
+  else if(a==='setup'){await save(defaultState());}
+  else if(a==='release'){await release(+b.dataset.i);}
+  else if(a==='reveal'){S.controller=true;await reveal();}
+  else if(a==='award'){await award(b.dataset.u,+b.dataset.p);}
+  else if(a==='taskdone'){await save({...st,phase:'reveal',reveal:{gain:st.reveal?.gain||{}},done:[...new Set([...(st.done||[]),st.idx])]});}
+  else if(a==='lobby'){await save({...st,phase:'lobby',reveal:null});}
+  else if(a==='end'){await save({...st,phase:'end'});}
+  else if(a==='del'){const u=b.dataset.u;
+    if(S.delArm===u){S.delArm=null;try{await S.db.doc('players/'+u).delete();}catch(err){toast('Verwijderen mislukt.');}
+      const sc={...(st.scores||{})};delete sc[u];await save({...st,scores:sc});}
+    else{S.delArm=u;render();setTimeout(()=>{if(S.delArm===u){S.delArm=null;render();}},4000);}}
+  else if(a==='reset'){if(S.resetArm>Date.now()){S.resetArm=0;await save({...st,phase:'lobby',scores:{},streak:{},leader:null,reveal:null,done:[],idx:-1});}
+    else{S.resetArm=Date.now()+4000;render();setTimeout(render,4100);}}
+});
+
+/* ---------- timers ---------- */
+setInterval(()=>{
+  const an=S.autoNext;
+  if(an&&S.owner){if(S.state?.phase!=='reveal'){S.autoNext=null;}else if(Date.now()>=an.at){release(an.idx);}else{const el=document.querySelector('[data-auto]');if(el)el.textContent=Math.max(0,Math.ceil((an.at-Date.now())/1000));}}
+  const st=S.state;if(st?.phase!=='open'||!st.q)return;
+  document.querySelectorAll('[data-timer]').forEach(el=>{const r=el.dataset.timer==='host'?remainingHost():remainingPlayer();el.textContent=Math.max(0,Math.ceil(r));});
+  document.querySelectorAll('[data-bar]').forEach(el=>{const r=el.dataset.bar==='host'?remainingHost():remainingPlayer();el.style.width=Math.max(0,r/st.q.limit*100)+'%';});
+  if(!S.owner&&!S.local.expired&&remainingPlayer()<=0){S.local.expired=true;render();}
+  checkAuto();
+},200);
+
+/* ---------- vuurwerk ---------- */
+const FW=(()=>{
+  const c=$('#fx'),ctx=c.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const GOLD=['#fff4cc','#ffd76a','#f4b43c','#ffe7a3','#ffffff','#f0c060'];
+  const TT=['#ff3a3a','#35e266','#36e6ff','#ff4ef0','#ffe41f'];
+  let P=[],run=false,W=0,H=0,endMode=false,amb=false,lastAuto=0;
+  function size(){const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
+  size();addEventListener('resize',size);
+  function burst(x,y,scale=1,pal){
+    pal=pal||(Math.random()<.72?GOLD:TT);
+    const n=Math.round(90*scale),ring=Math.random()<.4;
+    for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(ring?3.2:1+Math.random()*3.4)*scale*(H>700?1.25:1);
+      P.push({x,y,px:x,py:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:60+Math.random()*50,ml:110,c:pal[Math.random()*pal.length|0],w:1+Math.random()*1.6,tw:Math.random()<.35});}
+    for(let i=0;i<14*scale;i++)P.push({x,y,px:x,py:y,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2,l:30,ml:30,c:'#fff',w:3,tw:false});
+  }
+  function rocket(){
+    const x=W*(.12+Math.random()*.76);
+    P.push({rk:true,x,y:H+10,px:x,py:H+10,vx:(Math.random()-.5)*1.2,vy:-(H*.016+Math.random()*H*.006),ty:H*(.12+Math.random()*.32),c:'#ffe7a3',l:999,ml:999,w:2});
+  }
+  function step(t){
+    if(endMode&&t-lastAuto>420){lastAuto=t;rocket();if(Math.random()<.4)rocket();}
+    else if(amb&&!endMode&&t-lastAuto>3200){lastAuto=t;rocket();}
+    ctx.globalCompositeOperation='destination-out';ctx.fillStyle='rgba(0,0,0,.24)';ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    const add=[];
+    for(const p of P){
+      p.px=p.x;p.py=p.y;
+      if(p.rk){p.x+=p.vx;p.y+=p.vy;p.vy+=H*.00018;
+        if(p.y<=p.ty||p.vy>-1){p.l=0;add.push([p.x,p.y]);}
+        if(Math.random()<.6)P.push({x:p.x,y:p.y,px:p.x,py:p.y,vx:(Math.random()-.5)*.6,vy:Math.random()*.8,l:18,ml:18,c:'#f4b43c',w:1.2});
+      }else{p.vx*=.982;p.vy=p.vy*.982+.045;p.x+=p.vx;p.y+=p.vy;p.l--;}
+      const al=Math.max(0,Math.min(1,p.l/p.ml*1.4))*(p.tw&&Math.random()<.4?.25:1);
+      ctx.globalAlpha=al;ctx.strokeStyle=p.c;ctx.lineWidth=p.w;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(p.px,p.py);ctx.lineTo(p.x,p.y);ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    P=P.filter(p=>p.l>0&&p.y<H+40);
+    add.forEach(([x,y])=>burst(x,y,1));
+    if(P.length||endMode||amb){requestAnimationFrame(step);}else{run=false;ctx.clearRect(0,0,W,H);}
+  }
+  function start(){if(!run){run=true;requestAnimationFrame(step);}}
+  function still(n){ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+    for(let k=0;k<n;k++){const x=W*(.15+Math.random()*.7),y=H*(.12+Math.random()*.35);
+      for(let i=0;i<40;i++){const a=i/40*Math.PI*2,r=40+Math.random()*30;ctx.fillStyle=GOLD[i%GOLD.length];ctx.fillRect(x+Math.cos(a)*r,y+Math.sin(a)*r,2,2);}}
+    setTimeout(()=>ctx.clearRect(0,0,W,H),2200);}
+  return{
+    show(n){if(reduce){still(Math.min(n,4));return;}for(let i=0;i<n;i++)setTimeout(rocket,i*230+Math.random()*120);start();},
+    pop(x,y){if(reduce)return;burst(x,y,.35,GOLD);start();},
+    end(on){endMode=on&&!reduce;if(on&&reduce)still(5);if(endMode)start();},
+    ambient(on){amb=on&&!reduce;if(amb)start();}
+  };
+})();
+function fx(on){FW.end(on);}
+
+/* goud spatje bij elke tik op een antwoord */
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.opt');if(b&&!b.disabled)FW.pop(e.clientX,e.clientY);},true);
+
+/* vuurwerk bij goede antwoorden en punten */
+let celebSeq=null,celebTask=null;
+function celebrate(){
+  const st=S.state;if(!st)return;
+  const tv=(S.owner&&S.view==='tv')||NET.tv;const player=!S.owner&&S.uid&&S.players[S.uid]&&!S.editing;
+  FW.ambient(st.phase==='lobby'&&(tv||player));
+  if(st.phase==='reveal'&&st.seq!==celebSeq){
+    celebSeq=st.seq;
+    if(tv&&st.q&&!st.q.task)FW.show(5);
+    else if(player&&st.q&&!st.q.task){const g=st.q.test?(st.reveal?.answers?.[S.uid]?.c===st.reveal?.correct?600:0):(st.reveal?.gain?.[S.uid]||0);if(g>0)FW.show(g>=1500?14:g>=800?10:6);}
+  }
+  if(st.phase==='task'&&(tv||player)){
+    const g=st.reveal?.gain||{};const key=st.seq+'|'+JSON.stringify(g);
+    if(celebTask&&celebTask.split('|')[0]==String(st.seq)&&celebTask!==key){
+      const prev=JSON.parse(celebTask.split('|').slice(1).join('|'));
+      if(tv?Object.keys(g).some(k=>(g[k]||0)>(prev[k]||0)):(g[S.uid]||0)>(prev[S.uid]||0))FW.show(tv?3:6);}
+    celebTask=key;
+  }else celebTask=null;
+}
+
+/* vaste scorebalk */
+const lastPts={};
+function renderStrip(){
+  const el=$('#strip');const st=S.state;const list=st?ranking():[];
+  if(!st||!list.length){el.hidden=true;return;}
+  el.hidden=false;
+  const top=list[0].pts;
+  el.innerHTML=list.map((p,i)=>{const lead=top>0&&p.pts===top;
+    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,32)}</span><span class="n">${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
+  list.forEach(p=>{if(lastPts[p.id]!==undefined&&p.pts>lastPts[p.id]){const n=el.querySelector('[data-sid="'+p.id+'"]');n&&n.classList.add('bump');}lastPts[p.id]=p.pts;});
+}
+const _render=render;
+render=function(){_render();celebrate();renderStrip();};
+</script>
+
+</body></html>
