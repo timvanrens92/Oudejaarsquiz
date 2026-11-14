@@ -227,6 +227,16 @@ body.playing .wrap{gap:12px}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.result{animation:none}}
 .result .quip{font-size:clamp(26px,7.5vw,34px);margin:2px 0 4px}
+.jk{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 6px;border-radius:8px;background:linear-gradient(135deg,#ff4ef0,#ffe41f 55%,#36e6ff);color:var(--ink);font-family:var(--display);font-weight:700;font-size:18px;transform:rotate(-6deg);box-shadow:0 0 16px rgba(255,78,240,.45);flex:none}
+.jk.sm{min-width:0;height:auto;font-size:10px;padding:1px 4px;border-radius:4px;margin-right:4px;transform:none;vertical-align:1px}
+.joker{display:flex;align-items:center;gap:14px;width:100%;padding:10px 14px;border-radius:4px;border:1px dashed var(--magenta);background:rgba(255,78,240,.08);color:var(--fg);text-align:left;font-family:var(--body);font-size:15px;line-height:1.3}
+.joker.go{cursor:pointer;animation:jkpulse 1.6s ease-in-out infinite}
+.joker.go b{display:block;font-family:var(--display);font-size:16px;letter-spacing:.06em;color:var(--gold-hi)}
+.joker.go small{display:block;font-size:12px;color:var(--dim)}
+.joker.on{border-style:solid;border-color:var(--gold-hi);background:rgba(232,189,92,.12)}
+.jkline{display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--gold-hi)}
+@keyframes jkpulse{50%{box-shadow:0 0 22px rgba(255,78,240,.45)}}
+@media (prefers-reduced-motion:reduce){.joker.go{animation:none}}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -344,6 +354,7 @@ body.playing .wrap{gap:12px}
         if(msg.t!=='write')return;
         const o=seen.get(pid);seen.set(pid,{t:Date.now(),vis:o?o.vis:true});
         const p=msg.p;let v=msg.v;
+        if(p==='joker/'+pid){if(NET.onJoker&&v&&typeof v==='object')NET.onJoker(pid,v);return;}
         if(p!=='players/'+pid&&p!=='answers/'+pid)return;
         if(v===null||typeof v!=='object'||enc(v).length>200000)return;
         if(p.startsWith('players/')){if(!store.data[p]&&Object.keys(store.data).filter(k=>k.startsWith('players/')).length>=24)return;
@@ -464,6 +475,12 @@ async function presence(){const st=S.state;if(!S.owner||!st||presBusy)return;
     }else render();
   }finally{presBusy=false;}
 }
+NET.onJoker=(pid,v)=>{
+  const st=S.state;if(!st||st.phase!=='open'||st.paused||+v.seq!==st.seq||!S.players[pid])return;
+  if(!jokerEligible(st)||st.jokers?.[pid])return;
+  const prev=S.answers[pid];if(prev&&prev.seq===st.seq)return;
+  save({...st,jokers:{...(st.jokers||{}),[pid]:{round:st.q.round,seq:st.seq}}});
+};
 NET.validateWrite=(pid,p,v)=>{
   if(!p.startsWith('answers/'))return v;
   const st=S.state;if(!st||st.phase!=='open'||st.paused||v.seq!==st.seq||!S.players[pid])return undefined;
@@ -554,6 +571,17 @@ function personal(st){
   return pick(my.c===rv.correct?LINES.meGood:LINES.meBad,seq);
 }
 const nl=n=>Number(n||0).toLocaleString('nl-NL');
+const jokerOn=(st,id)=>!!(st&&st.q&&st.jokers?.[id]&&st.jokers[id].round===st.q.round);
+const jokerEligible=st=>!!(st&&st.q&&!st.q.test&&!st.q.task&&(st.q.mult||1)===1);
+function jokerBox(st,mine){
+  const j=st.jokers?.[S.uid];
+  if(jokerOn(st,S.uid))return `<div class="joker on"><span class="jk">×2</span><span>Joker actief: jouw punten tellen deze hele ronde dubbel.</span></div>`;
+  if(j)return '';
+  if(!jokerEligible(st))return '';
+  if(S.jokerPending===st.seq)return `<div class="joker"><span class="jk">×2</span><span>Joker wordt ingezet…</span></div>`;
+  if(mine!==null||st.paused)return '';
+  return `<button class="joker go" data-act="joker"><span class="jk">×2</span><span><b>Zet je joker in</b><small>Eén keer per spel. Vanaf deze vraag tellen jouw punten de rest van deze ronde dubbel.</small></span></button>`;
+}
 function resultCard(st,kind,gain){
   const list=ranking();const i=list.findIndex(p=>p.id===S.uid);if(i<0)return '';
   const me=list[i],lead=list[0],n=list.length;
@@ -566,6 +594,7 @@ function resultCard(st,kind,gain){
   const verdict={ok:'Goed!',bad:'Fout',none:'Te laat',task:'Punten!'}[kind];
   return `<div class="result ${kind}">
     <div class="verdict">${verdict}</div>
+    ${jokerOn(st,S.uid)&&!st.q.task?`<div class="jkline"><span class="jk">×2</span> Joker actief</div>`:''}
     ${gain>0?`<div class="gainbig">+${nl(gain)}</div>`:`<div class="gainbig zero">+0</div>`}
     ${kind!=='task'?`<p class="quip">${esc(personal(st))}</p>`:''}
     <div class="rankline">Je staat <b>${i+1}e</b> van ${n} · <b>${nl(me.pts)}</b> punten</div>
@@ -745,7 +774,7 @@ function renderPublic(tv){
   if(st.phase==='lobby'){
     const me=S.players[S.uid];
     h=`${tv?`<div class="tv-lobby">${qrBlock(true)}<div class="stack"><h3>${playerIds().length?`Er doen ${playerIds().length} spelers mee`:'Nog niemand binnen'}</h3><div class="crowd">${playerIds().map((id,i)=>`<span class="crowd-i" style="--d:${(i%5)*.3}s">${avatar(id,84,'party')}<small>${esc(pname(id))}</small></span>`).join('')}</div></div></div>`:`<div class="panel"><span class="label">Je speelt mee als</span><div class="row" style="padding-top:26px">${avatar(S.uid,72,'party')}<p class="mine">${esc(me?.name)}</p></div>
-      <p style="margin:0">Hoe sneller je het goede antwoord kiest, hoe meer punten. Elke ronde is meer waard, en de finale telt ×5. Achterstand is dus nooit verloren!</p>
+      <p style="margin:0">Hoe sneller je het goede antwoord kiest, hoe meer punten. Elke ronde is meer waard, en de finale telt ×5. Je hebt ook <b>één joker</b>: zet hem in tijdens een vraag uit een ronde zonder extra punten, dan tellen jouw punten de rest van die ronde dubbel.</p>
       <div class="row"><button class="btn ghost sm" data-act="edit">Naam wijzigen</button><button class="btn ghost sm" data-act="retake">Nieuwe selfie</button></div></div>`}
       ${tv?'':`<h3>Wie doen er mee</h3>${scoreboard(false)}`}`;
   }else if(st.phase==='open'){
@@ -758,6 +787,7 @@ function renderPublic(tv){
       <div class="timer-row"><span>${q.type==='music'?'Luister goed':'Tijd'}</span><b data-timer="${tv?'host':'player'}">${Math.max(0,Math.ceil(rem))}</b></div>
       <div class="timer"><i data-bar="${tv?'host':'player'}" style="width:${Math.max(0,rem/q.limit*100)}%"></i></div>
       <div class="opts">${q.options.map((o,i)=>`<button class="opt ${mine!==null&&mine!==i?'dimmed':''} ${mine===i?'picked':''}" data-act="ans" data-i="${i}" ${tv||closed?'disabled':''}><span class="k">${KEYLBL[i]}</span>${esc(o)}</button>`).join('')}</div>
+      ${!tv?jokerBox(st,mine):''}
       ${!tv&&mine!==null?`<p class="notice">Antwoord binnen in ${(S.myAns.ms/1000).toFixed(1)} seconden. Wachten op de rest…</p>`:''}
       ${!tv&&mine===null&&rem<=0?`<p class="notice">De tijd is om.</p>`:''}
     </div>`;
@@ -819,7 +849,7 @@ function renderHost(){
   }else if(st.phase==='reveal'){
     const ni=nextIdx();
     const an=S.autoNext;
-    now=`${it?itemHead(it):''}<p style="margin:0">Het antwoord en de stand staan op alle telefoons.</p>${commentary(st)?`<div class="commentator"><span class="label">De commentator</span><p>${esc(commentary(st))}</p></div>`:''}
+    now=`${it?itemHead(it):''}<p style="margin:0">Het antwoord en de stand staan op alle telefoons.</p>${!st.q?.task&&commentary(st)?`<div class="commentator"><span class="label">De commentator</span><p>${esc(commentary(st))}</p></div>`:''}
       ${an?`<div class="autonext"><p style="margin:0"><b>Skip nu naar het volgende nummer.</b> De volgende muziekvraag start over <b data-auto>${Math.max(0,Math.ceil((an.at-Date.now())/1000))}</b> seconden.</p><div class="row"><button class="btn sm" data-act="release" data-i="${an.idx}">Nu starten</button><button class="btn sm ghost" data-act="pauseauto">Pauzeer</button></div></div>`:''}
       <div class="row">${ni<bank.length?`<button class="btn" data-act="release" data-i="${ni}">Volgende: vraag ${pageNo(ni)}</button>`:''}<button class="btn ghost" data-act="lobby">Wachtscherm</button><button class="btn ghost" data-act="end">Eindstand tonen</button></div>`;
   }else if(st.phase==='end'){
@@ -884,7 +914,7 @@ async function reveal(){
   const answers={},gain={},scores={...(st.scores||{})};
   for(const id of playerIds()){const a=S.answers[id];
     if(a&&a.seq===st.seq){answers[id]={c:a.c,ms:a.ms};
-      if(a.c===it.correct&&!it.test){const p=Math.round((500+500*Math.max(0,1-a.ms/(st.q.limit*1000)))*(st.q.mult||1));gain[id]=p;scores[id]=(scores[id]||0)+p;}}}
+      if(a.c===it.correct&&!it.test){const p=(jokerOn(st,id)&&(it.mult||1)===1?2:1)*Math.round((500+500*Math.max(0,1-a.ms/(st.q.limit*1000)))*(st.q.mult||1));gain[id]=p;scores[id]=(scores[id]||0)+p;}}}
   const streak={...(st.streak||{})};let leaderChange=null;
   if(!it.test){for(const id of playerIds()){const ok=answers[id]&&answers[id].c===it.correct;const v=streak[id]||0;streak[id]=ok?Math.max(0,v)+1:Math.min(0,v)-1;}
     const top=Object.entries(scores).filter(([id])=>S.players[id]).sort((a,b)=>b[1]-a[1])[0];
@@ -932,6 +962,9 @@ document.addEventListener('click',async e=>{
   else if(a==='fs'){try{await document.documentElement.requestFullscreen();}catch(err){toast('Druk op F11 voor volledig scherm.');}render();}
   else if(a==='botson'){await addBots();}
   else if(a==='botsoff'){await removeBots();}
+  else if(a==='joker'){if(!st||st.phase!=='open'||answeredMine())return;S.jokerPending=st.seq;render();
+    try{await S.db.doc('joker/'+S.uid).set({seq:st.seq});}catch(err){S.jokerPending=null;toast('Joker niet verstuurd. Tik nog een keer.');render();}
+    setTimeout(()=>{if(S.jokerPending===st.seq&&!S.state?.jokers?.[S.uid]){S.jokerPending=null;toast('Joker kon niet worden ingezet.');render();}},5000);}
   else if(a==='edit'){S.editing=true;render();}
   else if(a==='retake'){S.retake=true;S.shot=null;S.raw=null;render();}
   else if(a==='canceledit'){S.editing=false;S.retake=false;S.shot=null;render();}
@@ -957,7 +990,7 @@ document.addEventListener('click',async e=>{
     if(S.delArm===u){S.delArm=null;try{await S.db.doc('players/'+u).delete();}catch(err){toast('Verwijderen mislukt.');}
       const sc={...(st.scores||{})};delete sc[u];await save({...st,scores:sc});}
     else{S.delArm=u;render();setTimeout(()=>{if(S.delArm===u){S.delArm=null;render();}},4000);}}
-  else if(a==='reset'){if(S.resetArm>Date.now()){S.resetArm=0;await save({...st,phase:'lobby',scores:{},streak:{},corr:{},qcount:0,leader:null,reveal:null,done:[],idx:-1});}
+  else if(a==='reset'){if(S.resetArm>Date.now()){S.resetArm=0;await save({...st,phase:'lobby',scores:{},streak:{},corr:{},qcount:0,jokers:{},leader:null,reveal:null,done:[],idx:-1});}
     else{S.resetArm=Date.now()+4000;render();setTimeout(render,4100);}}
 });
 
@@ -1069,7 +1102,7 @@ function renderStrip(){
   el.hidden=false;
   const top=list[0].pts;
   el.innerHTML=list.map((p,i)=>{const lead=top>0&&p.pts===top;
-    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,lead?38:32,lead?'party crown':'')}</span><span class="n">${lead?'<small class="lbl">Koploper</small>':''}${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
+    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,lead?38:32,lead?'party crown':'')}</span><span class="n">${lead?'<small class="lbl">Koploper</small>':''}${jokerOn(S.state,p.id)&&['open','reveal'].includes(S.state.phase)?'<span class="jk sm">×2</span>':''}${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
   list.forEach(p=>{if(lastPts[p.id]!==undefined&&p.pts>lastPts[p.id]){const n=el.querySelector('[data-sid="'+p.id+'"]');n&&n.classList.add('bump');}lastPts[p.id]=p.pts;});
 }
 const _render=render;
