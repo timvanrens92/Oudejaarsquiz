@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spelregels Oudejaarsquiz</title><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500&family=Pinyon+Script&display=swap">
+<style>/* Layout: gala-affiche in zwart en goud, zelfde als de quiz — gouden kop, één leeskolom, kaarten per onderwerp */
+:root{
+  --bg:#070509;--panel:rgba(22,17,10,.82);--fg:#f7efdc;--dim:#b8a888;--gold:#e8bd5c;--gold-hi:#fff0bf;--line:rgba(232,189,92,.38);--ink:#1a1206;
+  --green:#35e266;--red:#ff3a3a;--magenta:#ff4ef0;--cyan:#36e6ff;--yellow:#ffe41f;
+  --goldfill:linear-gradient(180deg,#fff2c6 0%,#f0c768 38%,#b9832a 62%,#f3d488 100%);
+  --display:"Cinzel","Trajan Pro",Georgia,serif;--script:"Pinyon Script","Snell Roundhand",cursive;--read:"Cormorant Garamond",Garamond,Georgia,serif;--body:"Jost","Futura","Avenir Next",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{margin:0;font-variant-numeric:lining-nums;font-family:var(--body);font-size:16px;line-height:1.6;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bokeh{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(circle at 8% 18%,rgba(255,206,110,.2) 0 26px,transparent 60px),radial-gradient(circle at 92% 12%,rgba(255,220,140,.16) 0 40px,transparent 90px),
+  radial-gradient(circle at 85% 70%,rgba(255,190,90,.12) 0 30px,transparent 80px),radial-gradient(circle at 15% 82%,rgba(255,215,130,.1) 0 50px,transparent 110px),
+  radial-gradient(ellipse at 50% 0%,rgba(232,189,92,.16),transparent 55%)}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding-block:calc(28px + env(safe-area-inset-top,0px)) calc(56px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
+.masthead{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;margin-bottom:6px}
+.masthead .pre{font-family:var(--display);font-size:11px;letter-spacing:.42em;color:var(--dim);text-transform:uppercase;padding-left:.42em}
+.masthead h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(34px,10vw,64px);line-height:1;letter-spacing:.02em;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 10px rgba(232,170,60,.35));text-wrap:balance}
+.masthead .script{font-family:var(--script);font-size:clamp(34px,9vw,54px);line-height:1.1;color:var(--gold-hi);text-shadow:0 0 18px rgba(255,200,100,.45)}
+.masthead .date{display:flex;align-items:center;gap:12px;width:100%;max-width:440px;font-family:var(--display);font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-top:8px}
+.masthead .date::before,.masthead .date::after{content:"";flex:1;height:1px;background:var(--line)}
+.lead{font-variant-numeric:lining-nums;font-family:var(--read);font-weight:600;font-size:22px;line-height:1.35;text-align:center;margin:0 auto;max-width:34ch;text-wrap:balance}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.hi{border-color:var(--gold-hi);box-shadow:0 0 28px rgba(255,200,90,.18)}
+.card.warn{border-color:var(--magenta);background:rgba(40,8,36,.6)}
+h2{margin:0;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.05em;color:var(--gold);text-wrap:balance;display:flex;align-items:center;gap:12px}
+h2 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--goldfill);color:var(--ink);font-size:14px;flex:none}
+h3{margin:4px 0 0;font-family:var(--display);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+li::marker{color:var(--gold)}
+b,strong{color:var(--gold-hi);font-weight:500}
+.muted{color:var(--dim);font-size:14px}
+.steps{list-style:none;padding:0;counter-reset:s;gap:10px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--gold);color:var(--gold-hi);font-family:var(--display);font-weight:700;font-size:13px;margin-top:1px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:8px 6px;border-bottom:1px solid rgba(232,189,92,.18);text-align:left;vertical-align:top}
+th{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);font-weight:600}
+td.m{font-family:var(--display);font-weight:700;color:var(--yellow);white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.08em;padding:3px 9px;border-radius:999px;background:var(--goldfill);color:var(--ink);vertical-align:2px}
+.jt{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 4px;border-radius:4px;font-family:var(--display);font-weight:700;font-size:14px;line-height:1;flex:none}
+.jt.have{background:linear-gradient(135deg,#ff4ef0,#ffe41f 55%,#36e6ff);color:var(--ink);transform:rotate(-6deg);box-shadow:0 0 10px rgba(255,78,240,.45)}
+.jt.now{background:var(--goldfill);color:var(--ink);box-shadow:0 0 12px rgba(255,200,90,.8)}
+.jt.used{color:var(--dim);border:1px solid var(--dim);opacity:.6;text-decoration:line-through}
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend div{display:flex;align-items:center;gap:12px}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.tile{border:1px solid rgba(232,189,92,.25);border-radius:4px;padding:12px;background:rgba(0,0,0,.35);display:flex;flex-direction:column;gap:4px}
+.tile .big{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.1}
+.ok{color:var(--green)}.bad{color:var(--red)}
+.kbd{display:inline-block;border:1px solid var(--line);border-radius:3px;padding:0 6px;font-size:13px;color:var(--fg);font-family:var(--body)}
+.secret{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.08em;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent}
+a{color:var(--gold-hi)}
+.url{word-break:break-all;font-size:15px}
+.foot{text-align:center;font-family:var(--script);font-size:30px;color:var(--gold-hi);margin-top:8px}
+.check li{list-style:none;position:relative;padding-left:4px}
+.check{padding-left:1.4em}
+.check li::before{content:"";position:absolute;left:-1.3em;top:.35em;width:13px;height:13px;border:1px solid var(--gold);border-radius:2px}
+@media print{.bokeh{display:none}}
+</style></head><body>
+<div class="bokeh" aria-hidden="true"></div>
+<main class="wrap">
+  <header class="masthead">
+    <span class="pre">Spelregels voor spelers</span>
+    <h1>Oudejaarsquiz</h1>
+    <span class="script">Back to the 00s</span>
+    <span class="date">31 december · op naar 2027</span>
+  </header>
+
+  <p class="lead">Morgen speel je mee met de oudejaarsquiz over de jaren '00. Je speelt voor jezelf, op je eigen telefoon. Lees dit even door, dan weet je precies hoe het werkt.</p>
+
+  <section class="card hi">
+    <h2><span class="n">1</span>Neem dit mee</h2>
+    <ul>
+      <li>Je <b>telefoon, goed opgeladen</b>. Een oplader is handig: het spel duurt ongeveer een uur.</li>
+      <li><b>Internet</b> via wifi of mobiele data.</li>
+      <li>Een werkende <b>camera</b>, voor je feestportret.</li>
+      <li>Je hoeft <b>niets te installeren</b> en geen account aan te maken.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">2</span>Zo doe je mee</h2>
+    <p>De link naar het spel krijg je pas op de avond zelf. Zo begint iedereen tegelijk.</p>
+    <ol class="steps">
+      <li><span>Scan de <b>QR-code op de tv</b> met de camera van je telefoon en open de link.</span></li>
+      <li><span>Vul je <b>naam</b> in en tik op <b>Doe mee</b>.</span></li>
+      <li><span>Maak een <b>selfie</b>. Trek gerust een gekke bek: je portret komt de hele avond in beeld.</span></li>
+      <li><span>Kies een <b>filter</b> (Goud, 00s-pop of Glamour) en je <b>extra's</b>: 2027-bril, snor, kroon, feesthoed of confetti. Zit de bril niet goed? Tik op <b>Ogen aantikken</b> en tik op je ogen.</span></li>
+      <li><span>Tik op <b>Deze is goed</b>. Klaar, je zit in het spel.</span></li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">3</span>Zo werkt een vraag</h2>
+    <ul>
+      <li>De vraag verschijnt tegelijk op je telefoon en op de tv. Je kiest uit <b>A, B, C of D</b>.</li>
+      <li>Je eerste keuze telt. Je kunt hem <b>niet meer wijzigen</b>.</li>
+      <li><b>Snelheid telt.</b> Een goed antwoord levert 500 tot 1.000 punten op: hoe sneller, hoe meer. Fout of te laat levert 0 punten op.</li>
+      <li>Bij de <b>muziekvragen</b> hoor je een nummer via de speaker en heb je wat langer de tijd.</li>
+      <li>Bij de <b>opdrachten</b>, zoals uitbeelden en neuriën, deelt de spelleider de punten uit.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">4</span>Steeds meer punten</h2>
+    <p>Elke ronde is meer waard dan de vorige. Een achterstand is dus nooit verloren.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Onderdeel</th><th>Punten</th></tr></thead>
+      <tbody>
+        <tr><td>Oefenvraag</td><td class="m">telt niet</td></tr>
+        <tr><td>Ronde 1 en 2</td><td class="m">×1</td></tr>
+        <tr><td>Ronde 3 en 4</td><td class="m">×1,5</td></tr>
+        <tr><td>Ronde 5 en 6</td><td class="m">×2</td></tr>
+        <tr><td>Ronde 7</td><td class="m">×2,5</td></tr>
+        <tr><td>Muziekronde</td><td class="m">×3</td></tr>
+        <tr><td>Opdrachten</td><td class="m">de spelleider beslist</td></tr>
+        <tr><td>Inzetvraag</td><td class="m">jij zet in</td></tr>
+        <tr><td>Finale</td><td class="m">×5</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted"><b>Inhaalbonus:</b> sta je achter, dan krijg je bij een goed antwoord tot 25% extra.</p>
+  </section>
+
+  <section class="card hi">
+    <h2><span class="n">5</span>Je joker</h2>
+    <p>Iedereen heeft <b>één joker</b>. Zet je hem in, dan <b>telt die vraag voor jou drie keer</b>.</p>
+    <ul>
+      <li>De joker kan alleen in <b>ronde 1 en 2</b>, de rondes zonder extra punten.</li>
+      <li>Je ziet eerst de vraag, en kiest dan of je je joker inzet. Doe dat <b>vóór je antwoordt</b>.</li>
+      <li>Fout met je joker? Dan krijg je 0 punten. Je verliest dus niets, maar je joker is wel op.</li>
+    </ul>
+    <h3>Bij elke speler zie je</h3>
+    <div class="legend">
+      <div><span class="jt have">J</span><span>De joker is nog niet gebruikt.</span></div>
+      <div><span class="jt now">×3</span><span>De joker wordt nu ingezet.</span></div>
+      <div><span class="jt used">J</span><span>De joker is al op.</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">6</span>De inzetvraag</h2>
+    <p>Vlak voor de finale komt één spannende vraag. Je ziet eerst de categorie en kiest dan je inzet: <b>0, 10 of 25% van je punten</b>.</p>
+    <div class="pair">
+      <div class="tile"><span class="big ok">Goed</span><span>Je inzet komt erbij.</span></div>
+      <div class="tile"><span class="big bad">Fout</span><span>Je inzet gaat eraf.</span></div>
+    </div>
+    <p class="muted">Bij deze vraag telt snelheid niet, dus neem rustig de tijd.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">7</span>Na elke vraag</h2>
+    <ul>
+      <li>Je ziet groot of je antwoord <b class="ok">goed</b> of <b class="bad">fout</b> was, en hoeveel punten je erbij krijgt.</li>
+      <li>Je ziet je <b>plek</b> in de stand, wie er <b>koploper</b> is, en hoeveel punten je nodig hebt om de speler boven je in te halen.</li>
+      <li>De commentator heeft een grappige opmerking, en bij een goed antwoord krijg je vuurwerk.</li>
+      <li>Komt er een <b>nieuwe koploper</b>, dan ziet iedereen dat groot in beeld.</li>
+    </ul>
+  </section>
+
+  <section class="card warn">
+    <h2><span class="n">8</span>Eerlijk spel: laat de pagina open</h2>
+    <ul>
+      <li>Ga je uit de pagina, open je een andere app of gaat je scherm uit? Dan <b>pauzeert het spel voor iedereen</b> tot je terug bent.</li>
+      <li>Zet daarom vooraf de <b>automatische schermvergrendeling</b> op 5 minuten of langer.</li>
+      <li>Ben je terug, dan telt het spel 3 seconden af. Daarna gaat het verder met de tijd die nog over was.</li>
+      <li>Je telefoon kan de tijd niet beïnvloeden: de spelleider meet zelf hoe snel iedereen antwoordt.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">9</span>Hulp nodig?</h2>
+    <ul>
+      <li><b>"Wachten op de spelleider"</b> betekent dat de spelleider nog niet klaar is. Blijf op de pagina: je komt vanzelf binnen.</li>
+      <li><b>Pagina per ongeluk dicht?</b> Scan de QR-code opnieuw op dezelfde telefoon. Je naam, foto en punten zijn er nog.</li>
+      <li><b>Camera gaat niet open?</b> Kies dan een foto uit je galerij.</li>
+      <li><b>Iets anders?</b> Roep de spelleider.</li>
+    </ul>
+  </section>
+
+  <p class="foot">Tot oudejaarsavond!</p>
+</main>
+</body></html>
