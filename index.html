@@ -338,6 +338,7 @@ body.hostcompact .masthead h1{font-size:clamp(22px,3vw,34px)}
 .nyfx{position:fixed;inset:0;z-index:16;display:grid;place-items:center;background:radial-gradient(circle,rgba(60,40,8,.9),rgba(0,0,0,.95));text-align:center;cursor:pointer}
 .nyfx p{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(90px,30vw,260px);line-height:1;background:var(--goldfill);-webkit-background-clip:text;background-clip:text;color:transparent;animation:leadin 1.2s cubic-bezier(.2,1.4,.4,1) both}
 @media (prefers-reduced-motion:reduce){.glitch,.mods span.cur,.escclock.low{animation:none}}
+.part2{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:6px;padding:12px;border:1px dashed var(--green);border-radius:4px;background:rgba(10,30,14,.45)}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -992,7 +993,7 @@ function renderHost(){
   const off=offlinePlayers();
   const hold=off.length?`<div class="pausebox"><span class="label">${st.phase==='open'?'Spel gepauzeerd':'Even wachten'}</span><p>Geen verbinding met ${off.map(id=>esc(pname(id))).join(', ')}. ${st.phase==='open'?'De tijd staat stil tot iedereen terug is.':'Starten kan zodra iedereen terug is.'}</p><div class="row" style="justify-content:center"><button class="btn sm ghost" data-act="ignoreoff">Toch doorgaan zonder ${off.length===1?esc(pname(off[0])):'hen'}</button></div></div>`:'';
   let now='';
-  if(st.phase==='lobby')now=`<p style="margin:0">Het wachtscherm met de QR-code staat aan. Start de eerste vraag met de knop onderaan zodra iedereen erin zit.</p>`;
+  if(st.phase==='lobby')now=`<p style="margin:0">Het wachtscherm met de QR-code staat aan. Start de eerste vraag met de knop onderaan zodra iedereen erin zit.</p>${typeof escPart2==='function'?`<div class="part2"><div class="stack" style="gap:2px;min-width:0"><span class="label">Deel 2</span><span>De escape room los starten, zonder de quiz.</span></div><button class="btn ghost" data-act="part2">Start deel 2: escape room</button></div>`:''}`;
   else if(st.phase==='open'&&it){
     const n=ids.filter(id=>S.answers[id]?.seq===st.seq).length;
     now=`${itemHead(it)}
@@ -1034,7 +1035,7 @@ function renderHost(){
       <div class="panel"><span class="label">Alleen testen</span>
         <p style="margin:0;font-size:14px">Testspelers geven vanzelf antwoord, meestal goed, zodat je de hele quiz alleen kunt doorlopen. Kijk op het tabblad TV-scherm wat de spelers zien.</p>
         <div class="row">${hasBots()?`<button class="btn sm ghost" data-act="botsoff">Testspelers verwijderen</button>`:`<button class="btn sm" data-act="botson">Voeg 3 testspelers toe</button>`}</div></div>
-      <div class="panel"><span class="label">Spel</span><div class="row"><button class="btn ghost sm" data-act="lobby">Wachtscherm</button><button class="btn ghost sm" data-act="end">Eindstand</button><button class="btn sm ${S.newArm>Date.now()?'r':'ghost'}" data-act="newgame">${S.newArm>Date.now()?'Klik nogmaals: alles wissen':'Nieuw spel'}</button><button class="btn sm ${S.resetArm>Date.now()?'r':'ghost'}" data-act="reset">${S.resetArm>Date.now()?'Klik nogmaals: alles op 0':'Scores resetten'}</button></div></div>`:''}
+      <div class="panel"><span class="label">Spel</span><div class="row"><button class="btn ghost sm" data-act="part2">Deel 2: escape room</button><button class="btn ghost sm" data-act="lobby">Wachtscherm</button><button class="btn ghost sm" data-act="end">Eindstand</button><button class="btn sm ${S.newArm>Date.now()?'r':'ghost'}" data-act="newgame">${S.newArm>Date.now()?'Klik nogmaals: alles wissen':'Nieuw spel'}</button><button class="btn sm ${S.resetArm>Date.now()?'r':'ghost'}" data-act="reset">${S.resetArm>Date.now()?'Klik nogmaals: alles op 0':'Scores resetten'}</button></div></div>`:''}
     </div>
     <div class="panel"><div class="row" style="justify-content:space-between"><span class="label">Vragenlijst · ${bank.length} onderdelen</span>${started?`<button class="btn sm ghost" data-act="fulllist">${S.fullList?'Alleen huidige':'Hele lijst'}</button>`:''}</div>${bank.length?`<div class="qlist">${rounds}</div>`:'<p class="muted">De vragen worden geladen…</p>'}</div>
   </div>${actionBar()}`;
@@ -1390,7 +1391,7 @@ function escPublic(tv){
   if(isMe){
     if(P.kind==='sync'){const n=E.pressN||0,of=E.pressOf||playerIds().length;const recent=E.pressAt&&hostNow()-E.pressAt<2500;
       input=`<button class="restart" data-act="escpress">HERSTART</button><p class="muted" style="text-align:center;margin:0">${recent?`${n} van ${of} tegelijk gedrukt. Nog een keer, samen!`:'Iedereen moet binnen 2 seconden drukken.'}</p>`;}
-    else input=`<form id="escform" class="escform" autocomplete="off"><input id="escin" type="text" placeholder="${P.kind==='clues'||P.kind==='final'?'Cijfers':'Antwoord'}" inputmode="${P.kind==='clues'||P.kind==='final'?'numeric':'text'}" autocapitalize="characters" ${locked?'disabled':''}><button class="btn" type="submit" ${locked?'disabled':''}>Verstuur</button></form>
+    else input=`<form id="escform" class="escform" autocomplete="off"><input id="escin${pub.i}" class="escin" type="text" placeholder="${P.kind==='clues'||P.kind==='final'?'Cijfers':'Antwoord'}" inputmode="${P.kind==='clues'||P.kind==='final'?'numeric':'text'}" autocapitalize="characters" ${locked?'disabled':''}><button class="btn" type="submit" ${locked?'disabled':''}>Verstuur</button></form>
       ${locked?`<p class="escfb">“${esc(fb.g)}” is fout. Je kunt over <b data-esclock="${fb.until}">${Math.ceil((fb.until-hostNow())/1000)}</b> s weer proberen.</p>`:''}`;
     if(ol===me&&E.oliebolUsed==null&&P.kind!=='sync')input+=`<button class="oliebtn" data-act="escoliebol"><b>Gebruik de Gouden Oliebol</b><small>Eén geheime hint die alleen jij ziet. Je kunt hem maar één keer gebruiken.</small></button>`;
     if(secret&&secret.pz===pub.i)input+=`<div class="secret"><span class="label">Geheime hint · Gouden Oliebol</span><p>${esc(secret.text)}</p></div>`;
@@ -1428,11 +1429,12 @@ function escEndNote(tv){
 }
 /* ---------- invoer ---------- */
 document.addEventListener('submit',e=>{if(e.target.id!=='escform')return;e.preventDefault();
-  const v=($('#escin')?.value||'').trim();const E=S.state?.escape;if(!v||!E||E.cur<0)return;escSend({t:'guess',pz:E.cur,g:v});$('#escin').value='';toast('Verstuurd…');});
+  const v=($('.escin')?.value||'').trim();if(!v){toast('Typ eerst je antwoord.');return;}const E=S.state?.escape;if(!v||!E||E.cur<0)return;escSend({t:'guess',pz:E.cur,g:v});$('.escin').value='';toast('Verstuurd…');});
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;const st=S.state;
   if(a==='escpress'){const E=st?.escape;if(E)escSend({t:'press',pz:E.cur});b.classList.remove('hit');void b.offsetWidth;b.classList.add('hit');}
   else if(a==='escoliebol'){const E=st?.escape;if(E)escSend({t:'oliebol',pz:E.cur});}
   else if(a==='escmidnight'&&S.owner){await escStart(true);}
+  else if(a==='part2'&&S.owner){await escPart2();}
   else if(a==='escskip'&&S.owner){if(S.skipArm>Date.now()){S.skipArm=0;await escSolve(null,true);}else{S.skipArm=Date.now()+4000;render();setTimeout(render,4100);}}
   else if(a==='escplus5'&&S.owner){const E={...st.escape,endAt:(st.escape.endAt||Date.now())+5*60000};await save({...st,escape:E});toast('Er zijn 5 minuten bij.');}
 });
@@ -1450,6 +1452,13 @@ setInterval(()=>{
   if(isNY&&!nyShown&&st&&ESC_PHASES.includes(st.phase)){nyShown=true;let el=document.createElement('div');el.className='nyfx';el.innerHTML=`<div><span class="label">Gelukkig nieuwjaar</span><p>2027</p></div>`;el.addEventListener('click',()=>el.remove());document.body.appendChild(el);FW.show(24);setTimeout(()=>el.remove(),20000);}
 },1000);
 function escInit(){if(!S.owner&&S.uid&&S.db)S.db.doc('priv/'+S.uid).onSnapshot(s=>{S.priv=s.exists?s.data():null;render();},()=>{});}
+
+/* deel 2 los starten: met quizpunten als die er zijn, anders iedereen gelijk */
+async function escPart2(){
+  const st=S.state;if(!st)return;const sc=st.scores||{};const played=Object.values(sc).some(v=>v>0);
+  if(played){await toEvening();return;}
+  await save({...st,phase:'escape',evening:{quiz:{},oliebol:null,at:Date.now()},escape:{cur:-1}});
+}
 
 /* ---------- vuurwerk ---------- */
 const FW=(()=>{
@@ -1549,7 +1558,15 @@ function renderStrip(){
   list.forEach(p=>{if(lastPts[p.id]!==undefined&&p.pts>lastPts[p.id]){const n=el.querySelector('[data-sid="'+p.id+'"]');n&&n.classList.add('bump');}lastPts[p.id]=p.pts;});
 }
 const _render=render;
-render=function(){_render();celebrate();renderStrip();};
+render=function(){
+  /* typwerk bewaren als het scherm ververst */
+  const ae=document.activeElement;const keep={};
+  document.querySelectorAll('input[id]').forEach(el=>{if(el.type!=='file')keep[el.id]=el.value;});
+  const fid=ae&&ae.id&&ae.tagName==='INPUT'?ae.id:null;let s0=null,s1=null;try{if(fid){s0=ae.selectionStart;s1=ae.selectionEnd;}}catch(e){}
+  _render();celebrate();renderStrip();
+  for(const id in keep){const el=document.getElementById(id);if(el&&el.type!=='file'&&!el.value&&keep[id]&&!el.dataset.fresh)el.value=keep[id];}
+  if(fid){const el=document.getElementById(fid);if(el&&!el.disabled){try{el.focus({preventScroll:true});if(s0!=null)el.setSelectionRange(s0,s1);}catch(e){}}}
+};
 </script>
 
 </body></html>
