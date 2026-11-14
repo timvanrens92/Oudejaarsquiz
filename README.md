@@ -1,5 +1,8 @@
 # Oudejaarsquiz – standalone handleiding
 
+## Link
+Spelleider: https://timvanrens92.github.io/Oudejaarsquiz/ (zonder iets erachter). Spelers scannen de QR-code.
+
 ## Online zetten (eenmalig)
 1. Zet `index.html` op een **https**-adres, bijvoorbeeld:
    - je eigen hosting: map `/quiz/` met daarin `index.html`
@@ -26,7 +29,10 @@
 ## Puntenopbouw
 Ronde 1–2 ×1 · ronde 3–4 ×1,5 · ronde 5–6 ×2 · ronde 7 ×2,5 · muziek en opdrachten ×3 · finale ×5.
 
+## Joker
+Iedere speler heeft één joker. Die kan alleen worden ingezet tijdens een vraag uit een ronde zonder vermenigvuldiger (ronde 1 en 2), vóór het antwoorden. Vanaf die vraag tellen de punten van die speler de rest van die ronde ×2.
+
 ## Goed om te weten
-- Verbinden gaat via de gratis PeerJS-dienst; laptop en telefoons hebben internet nodig.
+- Verbinden gaat via een publieke berichtenserver (met automatische reserve); laptop en telefoons hebben internet nodig. Spelleider en spelers zien dezelfde spelcode.
 - Ververs je per ongeluk de regie, dan staat alles er nog: spelers, scores en de lopende vraag.
 - **Nieuw spel** (twee keer tikken) wist spelers en scores voor een nieuwe ronde.
