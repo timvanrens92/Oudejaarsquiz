@@ -260,6 +260,12 @@ body.hostbar .wrap{padding-bottom:130px}
 .jkline.bonus{color:var(--green)}
 body.hostcompact .masthead .script,body.hostcompact .masthead .date{display:none}
 body.hostcompact .masthead h1{font-size:clamp(22px,3vw,34px)}
+.jt{display:inline-grid;place-items:center;min-width:16px;height:18px;padding:0 3px;margin-right:5px;border-radius:3px;font-family:var(--display);font-weight:700;font-size:10px;line-height:1;vertical-align:1px;flex:none}
+.jt.big{min-width:24px;height:26px;font-size:14px;margin:0 2px 0 8px}
+.jt.have{background:linear-gradient(135deg,#ff4ef0,#ffe41f 55%,#36e6ff);color:var(--ink);transform:rotate(-6deg);box-shadow:0 0 8px rgba(255,78,240,.45)}
+.jt.now{background:var(--goldfill);color:var(--ink);box-shadow:0 0 12px rgba(255,200,90,.8);animation:jkpulse 1.2s ease-in-out infinite}
+.jt.used{background:transparent;color:var(--dim);border:1px solid var(--dim);opacity:.55;text-decoration:line-through}
+.jlegend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--dim);align-items:center}
 .netbar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:20;background:var(--wine);color:var(--fg);font-family:var(--body);font-weight:500;padding:8px 14px;border-radius:999px;max-width:92vw;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 .netstat{display:flex;align-items:center;gap:8px;font-size:13px}
 .netstat i{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
@@ -559,7 +565,7 @@ function avatar(id,size,cls=''){const p=S.players[id]||{};const ini=esc((p.name|
 function scoreboard(withPlus){
   const gain=S.state?.reveal?.gain||{};const list=ranking();
   if(!list.length)return `<p class="muted">Nog niemand aangemeld.</p>`;
-  return `<div class="teams">${list.map((p,i)=>`<div class="team ${p.id===S.uid?'me':''}"><span class="rank">${i+1}</span>${avatar(p.id,38)}<span class="nm">${esc(p.name)}${p.id===S.uid?' (jij)':''}</span>${withPlus&&gain[p.id]?`<span class="plus">+${gain[p.id]}</span>`:''}<span class="pts">${p.pts}</span></div>`).join('')}</div>`;
+  return `<div class="teams">${list.map((p,i)=>`<div class="team ${p.id===S.uid?'me':''}"><span class="rank">${i+1}</span>${avatar(p.id,38)}<span class="nm">${esc(p.name)}${p.id===S.uid?' (jij)':''}</span>${jokerTag(p.id,true)}${withPlus&&gain[p.id]?`<span class="plus">+${gain[p.id]}</span>`:''}<span class="pts">${p.pts}</span></div>`).join('')}</div>`;
 }
 
 function qrBlock(big){
@@ -636,6 +642,12 @@ function personal(st){
 const nl=n=>Number(n||0).toLocaleString('nl-NL');
 const jokerOn=(st,id)=>!!(st&&st.q&&st.jokers?.[id]&&st.jokers[id].seq===st.seq);
 const jokerEligible=st=>!!(st&&st.q&&!st.q.test&&!st.q.task&&(st.q.mult||1)===1);
+function jokerTag(id,big){
+  const st=S.state;if(!st)return '';const j=st.jokers?.[id];
+  if(j&&j.seq===st.seq&&['open','reveal'].includes(st.phase))return `<span class="jt now${big?' big':''}" title="Joker nu ingezet">×3</span>`;
+  if(j)return `<span class="jt used${big?' big':''}" title="Joker al gebruikt">J</span>`;
+  return `<span class="jt have${big?' big':''}" title="Joker nog beschikbaar">J</span>`;
+}
 function stakeBox(st,mine){
   const mine0=(st.scores||{})[S.uid]||0;const cur=S.stake?.[st.seq];
   if(mine!==null)return `<div class="joker on"><span class="jk">${S.myAns?.s??cur??0}%</span><span>Je inzet staat vast. Goed = erbij, fout = eraf.</span></div>`;
@@ -846,7 +858,7 @@ function renderPublic(tv){
     h=`${tv?`<div class="tv-lobby">${qrBlock(true)}<div class="stack"><h3>${playerIds().length?`Er doen ${playerIds().length} spelers mee`:'Nog niemand binnen'}</h3><div class="crowd">${playerIds().map((id,i)=>`<span class="crowd-i" style="--d:${(i%5)*.3}s">${avatar(id,84,'party')}<small>${esc(pname(id))}</small></span>`).join('')}</div></div></div>`:`<div class="panel"><span class="label">Je speelt mee als</span><div class="row" style="padding-top:26px">${avatar(S.uid,72,'party')}<p class="mine">${esc(me?.name)}</p></div>
       <p style="margin:0">Hoe sneller je het goede antwoord kiest, hoe meer punten. Elke ronde is meer waard, en de finale telt ×5. Je hebt ook <b>één joker</b>: zet hem in tijdens een vraag uit een ronde zonder extra punten, dan telt die vraag voor jou drie keer. Sta je achter? Dan krijg je een inhaalbonus tot +25%.</p>
       <div class="row"><button class="btn ghost sm" data-act="edit">Naam wijzigen</button><button class="btn ghost sm" data-act="retake">Nieuwe selfie</button></div></div>`}
-      ${tv?'':`<h3>Wie doen er mee</h3>${scoreboard(false)}`}`;
+      ${tv?'':`<h3>Wie doen er mee</h3>${scoreboard(false)}`}<div class="jlegend"><span><span class="jt have">J</span>joker nog beschikbaar</span><span><span class="jt now">×3</span>nu ingezet</span><span><span class="jt used">J</span>al gebruikt</span></div>`;
   }else if(st.phase==='open'){
     const mine=tv?null:(answeredMine()?S.myAns.c:null);
     const rem=tv?remainingHost():remainingPlayer();
@@ -1228,7 +1240,7 @@ function renderStrip(){
   el.hidden=false;
   const top=list[0].pts;
   el.innerHTML=list.map((p,i)=>{const lead=top>0&&p.pts===top;
-    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,lead?38:32,lead?'party crown':'')}</span><span class="n">${lead?'<small class="lbl">Koploper</small>':''}${jokerOn(S.state,p.id)&&['open','reveal'].includes(S.state.phase)?'<span class="jk sm">×3</span>':''}${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
+    return `<div class="cell ${lead?'lead':''} ${p.id===S.uid?'mine-team':''}"><span class="rk">${avatar(p.id,lead?38:32,lead?'party crown':'')}</span><span class="n">${lead?'<small class="lbl">Koploper</small>':''}${jokerTag(p.id)}${esc(p.name)}${p.id===S.uid?' (jij)':''}</span><span class="s" data-sid="${p.id}">${p.pts}</span></div>`;}).join('');
   list.forEach(p=>{if(lastPts[p.id]!==undefined&&p.pts>lastPts[p.id]){const n=el.querySelector('[data-sid="'+p.id+'"]');n&&n.classList.add('bump');}lastPts[p.id]=p.pts;});
 }
 const _render=render;

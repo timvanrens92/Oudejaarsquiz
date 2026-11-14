@@ -34,6 +34,7 @@ Ronde 1–2 ×1 · ronde 3–4 ×1,5 · ronde 5–6 ×2 · ronde 7 ×2,5 · muzi
 
 ## Joker
 Iedere speler heeft één joker, alleen in te zetten tijdens een vraag uit een ronde zonder vermenigvuldiger (ronde 1 en 2), vóór het antwoorden. Die vraag telt dan ×3.
+In de scorebalk en de stand ziet iedereen per speler: kleurige **J** = joker nog beschikbaar, gouden **×3** = nu ingezet, grijze doorgestreepte **J** = al gebruikt.
 
 ## Bedienen als spelleider
 - De grote knop onderaan doet altijd de volgende stap: vraag starten, antwoord tonen, opdracht afronden, volgende vraag, eindstand.
