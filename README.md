@@ -27,10 +27,19 @@ Spelleider: https://timvanrens92.github.io/Oudejaarsquiz/ (zonder iets erachter)
 - Tussen vragen kun je pas verder als iedereen verbonden is. Met **Toch doorgaan zonder …** ga je toch verder.
 
 ## Puntenopbouw
-Ronde 1–2 ×1 · ronde 3–4 ×1,5 · ronde 5–6 ×2 · ronde 7 ×2,5 · muziek en opdrachten ×3 · finale ×5.
+Ronde 1–2 ×1 · ronde 3–4 ×1,5 · ronde 5–6 ×2 · ronde 7 ×2,5 · muziek ×3 · finale ×5 (6 vragen + toost).
+- **Inhaalbonus:** wie achterstaat krijgt op een goed antwoord tot +25% extra.
+- **Opdrachten:** vaste punten (+500 per tik op een selfie, +1000 of −250 met de kleine knopjes), geen vermenigvuldiger.
+- **Inzetvraag vóór de finale:** spelers zetten 0, 10 of 25% van hun punten in. Goed = erbij, fout = eraf. Snelheid telt niet.
 
 ## Joker
-Iedere speler heeft één joker. Die kan alleen worden ingezet tijdens een vraag uit een ronde zonder vermenigvuldiger (ronde 1 en 2), vóór het antwoorden. Vanaf die vraag tellen de punten van die speler de rest van die ronde ×2.
+Iedere speler heeft één joker, alleen in te zetten tijdens een vraag uit een ronde zonder vermenigvuldiger (ronde 1 en 2), vóór het antwoorden. Die vraag telt dan ×3.
+
+## Bedienen als spelleider
+- De grote knop onderaan doet altijd de volgende stap: vraag starten, antwoord tonen, opdracht afronden, volgende vraag, eindstand.
+- **Spatie** = volgende stap · **P** = pauze (tijd staat stil; nogmaals P = hervatten na 3 tellen).
+- Zodra het spel loopt, klappen QR-code, spelers en instellingen in en toont de vragenlijst alleen de huidige vragen.
+- **Afstandsbediening:** onder de QR-code staat een tweede QR-code. Scan die met je eigen telefoon en vul de spelleiderscode in. Dan bedien je het spel vanaf de bank, zie je het goede antwoord en deel je opdrachtpunten uit.
 
 ## Goed om te weten
 - Verbinden gaat via een publieke berichtenserver (met automatische reserve); laptop en telefoons hebben internet nodig. Spelleider en spelers zien dezelfde spelcode.
